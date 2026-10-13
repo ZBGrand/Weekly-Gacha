@@ -10,29 +10,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: "21"
           distribution: temurin
           cache: maven
+          cache-dependency-path: WeeklyGacha/pom.xml
 
-      - name: Check project directory
+      - name: Verify project structure
         run: |
-          pwd
+          echo "Repository root:"
           ls -la
+          echo "WeeklyGacha project:"
           ls -la WeeklyGacha
+          test -f WeeklyGacha/pom.xml
 
       - name: Build with Maven
         working-directory: ./WeeklyGacha
         run: mvn -B clean package
 
+      - name: Find generated JAR
+        run: |
+          echo "Generated JAR files:"
+          find WeeklyGacha/target -maxdepth 1 -type f -name "*.jar" -print
+
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
-          name: MMOItemsCollection
-          path: MMOItemsCollection/target/*.jar
+          name: WeeklyGacha
+          path: WeeklyGacha/target/*.jar
           if-no-files-found: error
