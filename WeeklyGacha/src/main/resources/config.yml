@@ -1,0 +1,337 @@
+# =====================================================================
+#  WeeklyGacha - cau hinh chinh
+#  Moi chuoi van ban dung dinh dang MiniMessage: <gold>, <bold>, <gradient:#fff:#000> ...
+# =====================================================================
+
+settings:
+  # Thoi gian cho giua 2 lan quay (ms) de chong spam click
+  pull-cooldown-ms: 500
+  # Do hiem nao se duoc thong bao toan server (co the ghi de bang "broadcast: true/false" o tung vat pham)
+  broadcast-rarities: [LEGENDARY]
+
+# ---------------------------------------------------------------------
+#  Chu ky banner gioi han
+# ---------------------------------------------------------------------
+cycle:
+  # Moc bat dau chu ky dau tien. Dinh dang: yyyy-MM-dd hoac "yyyy-MM-dd HH:mm".
+  # De trong => dung thoi diem plugin chay lan dau.
+  # Luu y: neu admin da dung /gachaadmin restartcycle thi moc luu trong data.db se duoc uu tien.
+  start-date: "2026-10-13"
+  timezone: "Asia/Ho_Chi_Minh"
+  length-days: 14
+  # Thu tu xoay vong cua cac banner type LIMITED (de trong => tat ca banner LIMITED theo thu tu khai bao)
+  rotation: [dragon_festival, frost_moon]
+  # true: banner do admin chon thu cong chi co hieu luc den het chu ky hien tai
+  # false: giu mai cho den khi dung /gachaadmin auto
+  clear-override-on-new-cycle: true
+
+# ---------------------------------------------------------------------
+#  Banner
+#  - type: NORMAL (luon mo) | LIMITED (xoay vong theo chu ky)
+#  - rewards.<id>: moi vat pham co "chance" (%) rieng. Tong nen = 100, neu lech plugin se tu chuan hoa.
+#      provider: MMOITEMS | ITEMSADDER | VANILLA | COMMAND
+#        MMOITEMS   -> type: <loai MMOItems, vd SWORD>   item: <ID_MMOITEMS>
+#        ITEMSADDER -> item: <namespace:id>
+#        VANILLA    -> item: <MATERIAL>  (co the them name/lore)
+#        COMMAND    -> commands: [ "lenh chay bang console, {player} = ten nguoi choi" ]  icon: <MATERIAL>
+#      rarity: COMMON | UNCOMMON | RARE | EPIC | LEGENDARY
+#      featured: true => vat pham "nang" cua banner (dung cho co che dam bao)
+#  - pity: bao hiem
+#      rarity            do hiem duoc bao dam (mac dinh LEGENDARY)
+#      hard              toi da bao nhieu luot thi chac chan ra rarity do
+#      soft-start        tu luot nay ty le cua rarity do bat dau tang
+#      soft-boost        moi luot sau soft-start, ty le nhan them (1 + boost * so_luot_vuot)
+#      guarantee-featured  neu lan truoc ra vat pham KHONG featured thi lan sau chac chan featured
+#    Pity duoc tinh rieng cho tung nguoi choi va tung banner (banner quay lai se giu nguyen pity).
+# ---------------------------------------------------------------------
+banners:
+
+  standard:
+    type: NORMAL
+    display-name: "<green><bold>Banner Thường"
+    icon: CHEST
+    description:
+      - "<gray>Banner vĩnh viễn, luôn mở."
+      - "<gray>Phần thưởng cơ bản và vài vật phẩm quý."
+    cost:
+      single: 1000
+      ten: 9000
+    pity:
+      enabled: true
+      rarity: LEGENDARY
+      hard: 90
+      soft-start: 74
+      soft-boost: 0.6
+      guarantee-featured: false
+    rewards:
+      iron_ingot:
+        provider: VANILLA
+        item: IRON_INGOT
+        amount: 16
+        rarity: COMMON
+        chance: 34
+      cooked_beef:
+        provider: VANILLA
+        item: COOKED_BEEF
+        amount: 32
+        rarity: COMMON
+        chance: 28
+      xp_bottles:
+        provider: VANILLA
+        item: EXPERIENCE_BOTTLE
+        amount: 32
+        rarity: UNCOMMON
+        chance: 20
+      diamonds:
+        provider: VANILLA
+        item: DIAMOND
+        amount: 3
+        rarity: RARE
+        chance: 6
+      xp_pouch:
+        provider: COMMAND
+        name: "<aqua>Túi kinh nghiệm"
+        icon: EXPERIENCE_BOTTLE
+        commands:
+          - "experience add {player} 500 points"
+        rarity: RARE
+        chance: 5
+      golden_apple:
+        provider: VANILLA
+        item: ENCHANTED_GOLDEN_APPLE
+        rarity: EPIC
+        chance: 3.4
+      totem:
+        provider: VANILLA
+        item: TOTEM_OF_UNDYING
+        rarity: EPIC
+        chance: 2.0
+      netherite_ingot:
+        provider: VANILLA
+        item: NETHERITE_INGOT
+        amount: 2
+        rarity: LEGENDARY
+        chance: 0.9
+      elytra:
+        provider: VANILLA
+        item: ELYTRA
+        rarity: LEGENDARY
+        chance: 0.7
+
+  dragon_festival:
+    type: LIMITED
+    display-name: "<gradient:#ff5f6d:#ffc371><bold>Lễ Hội Rồng Lửa"
+    icon: DRAGON_HEAD
+    description:
+      - "<gray>Banner giới hạn theo chu kỳ 14 ngày."
+      - "<yellow>Tăng tỷ lệ: <gold>Kiếm Rồng Lửa<yellow> và <gold>Giáp Rồng Lửa"
+    cost:
+      single: 1500
+      ten: 13500
+    pity:
+      enabled: true
+      rarity: LEGENDARY
+      hard: 80
+      soft-start: 62
+      soft-boost: 0.7
+      guarantee-featured: true
+    rewards:
+      # ---- Vi du dung MMOItems / ItemsAdder (bo dau # va sua ID cho khop server cua ban) ----
+      # dragon_blade:
+      #   provider: MMOITEMS
+      #   type: SWORD
+      #   item: DRAGON_BLADE
+      #   rarity: LEGENDARY
+      #   chance: 0.8
+      #   featured: true
+      # dragon_wings:
+      #   provider: ITEMSADDER
+      #   item: myset:dragon_wings
+      #   rarity: LEGENDARY
+      #   chance: 0.8
+      #   featured: true
+      dragon_sword:
+        provider: VANILLA
+        item: NETHERITE_SWORD
+        name: "<gold>Kiếm Rồng Lửa"
+        lore:
+          - "<gray>Vũ khí của Lễ Hội Rồng Lửa"
+        rarity: LEGENDARY
+        chance: 0.8
+        featured: true
+      dragon_armor:
+        provider: VANILLA
+        item: NETHERITE_CHESTPLATE
+        name: "<gold>Giáp Rồng Lửa"
+        lore:
+          - "<gray>Giáp của Lễ Hội Rồng Lửa"
+        rarity: LEGENDARY
+        chance: 0.8
+        featured: true
+      elytra:
+        provider: VANILLA
+        item: ELYTRA
+        rarity: LEGENDARY
+        chance: 0.4
+      golden_apple:
+        provider: VANILLA
+        item: ENCHANTED_GOLDEN_APPLE
+        amount: 2
+        rarity: EPIC
+        chance: 3
+      totem:
+        provider: VANILLA
+        item: TOTEM_OF_UNDYING
+        rarity: EPIC
+        chance: 3
+      diamonds:
+        provider: VANILLA
+        item: DIAMOND
+        amount: 5
+        rarity: RARE
+        chance: 12
+      xp_bottles:
+        provider: VANILLA
+        item: EXPERIENCE_BOTTLE
+        amount: 64
+        rarity: UNCOMMON
+        chance: 20
+      iron_ingot:
+        provider: VANILLA
+        item: IRON_INGOT
+        amount: 24
+        rarity: COMMON
+        chance: 35
+      blaze_rod:
+        provider: VANILLA
+        item: BLAZE_ROD
+        amount: 16
+        rarity: COMMON
+        chance: 25
+
+  frost_moon:
+    type: LIMITED
+    display-name: "<gradient:#74ebd5:#9face6><bold>Trăng Băng Giá"
+    icon: BLUE_ICE
+    description:
+      - "<gray>Banner giới hạn theo chu kỳ 14 ngày."
+      - "<yellow>Tăng tỷ lệ: <aqua>Cúp Băng Giá"
+    cost:
+      single: 1500
+      ten: 13500
+    pity:
+      enabled: true
+      rarity: LEGENDARY
+      hard: 80
+      soft-start: 62
+      soft-boost: 0.7
+      guarantee-featured: true
+    rewards:
+      frost_pickaxe:
+        provider: VANILLA
+        item: NETHERITE_PICKAXE
+        name: "<aqua>Cúp Băng Giá"
+        lore:
+          - "<gray>Vật phẩm của Trăng Băng Giá"
+        rarity: LEGENDARY
+        chance: 1.0
+        featured: true
+      trident:
+        provider: VANILLA
+        item: TRIDENT
+        rarity: LEGENDARY
+        chance: 1.0
+      golden_apple:
+        provider: VANILLA
+        item: ENCHANTED_GOLDEN_APPLE
+        amount: 2
+        rarity: EPIC
+        chance: 3
+      totem:
+        provider: VANILLA
+        item: TOTEM_OF_UNDYING
+        rarity: EPIC
+        chance: 3
+      diamonds:
+        provider: VANILLA
+        item: DIAMOND
+        amount: 5
+        rarity: RARE
+        chance: 12
+      xp_bottles:
+        provider: VANILLA
+        item: EXPERIENCE_BOTTLE
+        amount: 64
+        rarity: UNCOMMON
+        chance: 20
+      packed_ice:
+        provider: VANILLA
+        item: PACKED_ICE
+        amount: 32
+        rarity: COMMON
+        chance: 35
+      cooked_cod:
+        provider: VANILLA
+        item: COOKED_COD
+        amount: 32
+        rarity: COMMON
+        chance: 25
+
+# ---------------------------------------------------------------------
+#  Tin nhan chat. Placeholder dang <ten>. Chuoi GUI nam trong GachaMenu.java
+# ---------------------------------------------------------------------
+messages:
+  prefix: "<gradient:#ffb347:#ffcc33><bold>WeeklyGacha</bold></gradient> <dark_gray>» </dark_gray>"
+  no-permission: "<red>Bạn không có quyền thực hiện điều này."
+  players-only: "<red>Lệnh này chỉ dùng được trong game."
+  data-loading: "<yellow>Dữ liệu của bạn đang được tải, hãy thử lại sau giây lát."
+  no-banner: "<red>Hiện chưa có banner nào đang mở."
+  banner-not-found: "<red>Không tìm thấy banner <white><id></white>."
+  banner-inactive: "<red>Banner này hiện không mở."
+  economy-missing: "<red>Chưa có plugin kinh tế (Vault). Hãy báo quản trị viên."
+  not-enough-money: "<red>Bạn cần <white><cost></white> nhưng chỉ có <white><balance></white>."
+  withdraw-failed: "<red>Không thể trừ tiền: <white><reason></white>"
+  reward-unavailable: "<red>Vật phẩm <white><reward></white> chưa sẵn sàng (lỗi cấu hình). Bạn chưa bị trừ tiền."
+  cooldown: "<gray>Bạn thao tác quá nhanh, hãy chờ một chút."
+  pull-summary: "<green>Đã quay <white><count></white> lượt tại <banner><green> — tiêu tốn <white><cost></white>."
+  pull-line: "<gray> • <item> <dark_gray>(x<amount>)"
+  broadcast-rare: "<gold>★ <white><player></white> vừa quay được <item><gold> tại <banner><gold> sau <white><pity></white> lượt!"
+  cycle-changed: "<gold>Banner giới hạn mới đã mở: <banner><gold>! Dùng <white>/gacha</white> để thử vận may."
+  history-error: "<red>Không thể tải lịch sử, hãy thử lại sau."
+  help:
+    - "<gold>/gacha <gray>- mở giao diện gacha"
+    - "<gold>/gacha pull [1|10] [banner] <gray>- quay nhanh"
+    - "<gold>/gacha rates [banner] <gray>- xem tỷ lệ"
+    - "<gold>/gacha history <gray>- lịch sử quay"
+    - "<gold>/gacha pity [banner] <gray>- xem bảo hiểm"
+    - "<gold>/gacha info <gray>- banner đang mở"
+  info-line: "<gray> • <banner><gray> — <type><gray> — còn <white><remaining>"
+  admin-usage:
+    - "<gold>/gachaadmin info <gray>- thông tin chu kỳ"
+    - "<gold>/gachaadmin list <gray>- danh sách banner"
+    - "<gold>/gachaadmin setbanner <id> <gray>- đổi banner giới hạn thủ công"
+    - "<gold>/gachaadmin auto <gray>- quay lại xoay vòng tự động"
+    - "<gold>/gachaadmin next <gray>- chuyển sang banner kế tiếp"
+    - "<gold>/gachaadmin restartcycle [config|yyyy-MM-dd] <gray>- đặt lại mốc chu kỳ"
+    - "<gold>/gachaadmin reload <gray>- nạp lại cấu hình"
+    - "<gold>/gachaadmin resetpity <người chơi> [banner] <gray>- xoá pity"
+    - "<gold>/gachaadmin history <người chơi> [số dòng] <gray>- xem lịch sử"
+    - "<gold>/gachaadmin check <gray>- kiểm tra vật phẩm cấu hình"
+  admin-info:
+    - "<gold>Chu kỳ hiện tại: <white>#<cycle> <gray>(<length> ngày)"
+    - "<gray>Bắt đầu: <white><start>"
+    - "<gray>Kết thúc: <white><end> <gray>(còn <white><remaining><gray>)"
+    - "<gray>Banner giới hạn đang mở: <white><active>"
+    - "<gray>Đang ghi đè thủ công: <white><override>"
+  admin-banner-set: "<green>Đã đặt banner giới hạn hiện tại thành <banner><green>."
+  admin-banner-invalid: "<red>Banner <white><id></white> không tồn tại hoặc không phải loại LIMITED."
+  admin-auto: "<green>Đã quay lại xoay vòng tự động. Banner hiện tại: <banner><green>."
+  admin-next: "<green>Đã chuyển sang banner kế tiếp: <banner><green>."
+  admin-restart: "<green>Đã đặt mốc chu kỳ mới: <white><start></white>."
+  admin-restart-invalid: "<red>Ngày không hợp lệ. Dùng yyyy-MM-dd, \"config\" hoặc bỏ trống."
+  admin-reload: "<green>Đã nạp lại cấu hình (<white><banners></white> banner)."
+  admin-reset: "<green>Đã xoá pity của <white><player></white>."
+  admin-player-unknown: "<red>Không tìm thấy người chơi <white><player></white>."
+  admin-check-ok: "<green>Tất cả <white><count></white> vật phẩm đều hợp lệ."
+  admin-check-fail: "<red>Vật phẩm lỗi: <white><banner>/<reward></white> (<provider>)"
+  admin-history-line: "<gray><time> <dark_gray>| <banner> <dark_gray>| <item> <dark_gray>| pity <white><pity>"
