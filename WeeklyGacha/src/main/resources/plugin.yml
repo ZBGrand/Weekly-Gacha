@@ -1,0 +1,29 @@
+name: WeeklyGacha
+version: '${project.version}'
+main: com.weeklygacha.WeeklyGachaPlugin
+api-version: '1.21'
+description: Gacha voi banner xoay vong 14 ngay, pity, MMOItems/ItemsAdder, Vault
+authors: [WeeklyGacha]
+
+depend: [Vault]
+softdepend: [MMOItems, MythicLib, ItemsAdder]
+
+commands:
+  gacha:
+    description: Mo giao dien gacha
+    usage: /<command> [open|pull|rates|history|spark|animation|info]
+    aliases: [wgacha]
+    permission: weeklygacha.use
+  gachaadmin:
+    description: Lenh quan tri WeeklyGacha
+    usage: /<command> <info|list|setbanner|auto|next|restartcycle|reload|resetspark|history|check>
+    aliases: [gadmin]
+    permission: weeklygacha.admin
+
+permissions:
+  weeklygacha.use:
+    description: Cho phep dung /gacha va quay
+    default: true
+  weeklygacha.admin:
+    description: Cho phep dung /gachaadmin
+    default: op
