@@ -1,0 +1,434 @@
+# =====================================================================
+#  WeeklyGacha - giao dien (gui.yml)
+#  Sua file nay roi chay /gachaadmin reload (khong can build lai plugin).
+#
+#  CACH VIET
+#   - Chu dung MiniMessage: <gold>, <bold>, <gradient:#ff5f6d:#ffc371> ...
+#   - {ten} la bien do plugin dien vao. Moi muc ben duoi ghi ro co nhung bien nao.
+#   - Dong lore bat dau bang [if:dieu-kien] chi hien khi dieu kien bat,
+#     [if:!dieu-kien] chi hien khi dieu kien tat. Co the ghep: [if:a][if:!b]text
+#   - Dong lore chi gom mot khoi, vi du {description}, se duoc thay bang nhieu dong.
+#   - Moi vat pham co: material, amount, name, lore, glow (true/false), slot (o trong GUI).
+#     Dat "enabled: false" de an vat pham do. Slot di tu 0 (tren-trai) toi 8 (tren-phai),
+#     hang 2 bat dau o 9, ... hang 6 bat dau o 45.
+#   - Muc nao bi xoa se tu lay lai gia tri mac dinh cua plugin.
+# =====================================================================
+
+# ---------------------------------------------------------------------
+#  Chung
+# ---------------------------------------------------------------------
+general:
+  filler:                      # nen cua menu chinh / spark / ty le / lich su
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+  background:                  # nen cua man hinh ket qua quay
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+
+# Ten, mau, tam kinh (trong hoat anh) cua tung do hiem. Khoa phai la COMMON ... LEGENDARY.
+rarity:
+  COMMON:
+    label: "Thường"
+    color: "<gray>"
+    pane: LIGHT_GRAY_STAINED_GLASS_PANE
+  UNCOMMON:
+    label: "Khá"
+    color: "<green>"
+    pane: LIME_STAINED_GLASS_PANE
+  RARE:
+    label: "Hiếm"
+    color: "<aqua>"
+    pane: LIGHT_BLUE_STAINED_GLASS_PANE
+  EPIC:
+    label: "Sử thi"
+    color: "<light_purple>"
+    pane: PURPLE_STAINED_GLASS_PANE
+  LEGENDARY:
+    label: "Huyền thoại"
+    color: "<gold>"
+    pane: ORANGE_STAINED_GLASS_PANE
+
+# Dinh dang so / thoi gian / chi phi
+format:
+  day: "ngày"
+  hour: "giờ"
+  minute: "phút"
+  date: "dd/MM/yyyy HH:mm"      # mau ngay gio (Java DateTimeFormatter)
+  rate: "0.###"                 # mau so thap phan cua ty le (phan tram)
+  infinite: "∞"
+  points: "{amount} điểm"       # chi phi PlayerPoints. Bien: {amount}
+  key: "{amount}x {name}"       # chi phi bang key.     Bien: {amount} {name}
+  bar:                          # thanh tien do spark
+    cells: 20
+    filled: "<green>▮"
+    empty: "<dark_gray>▮"
+
+# ---------------------------------------------------------------------
+#  The vat pham (dung o ty le, ket qua quay, chon spark, trung bay banner)
+#  Bien : {name} {rarity} {rarity-color} {amount} {rate} {pity}
+#  Dieu kien: amount (so luong > 1), rate (dang hien ty le), featured (vat pham noi bat),
+#             pity (dang hien so luot ra sau lan hiem truoc), choose (dang chon spark)
+#  Hinh dang cua the lay tu chinh vat pham, nen o day khong co material.
+# ---------------------------------------------------------------------
+reward-card:
+  name: "{rarity-color}{name}"
+  lore:
+    - "<gray>Độ hiếm: {rarity}"
+    - "[if:amount]<gray>Số lượng: <white>x{amount}"
+    - "[if:rate]<gray>Tỷ lệ: <white>{rate}%"
+    - "[if:featured]<yellow>★ Vật phẩm nổi bật"
+    - "[if:pity]<gray>Ra sau: <white>{pity}<gray> lượt kể từ lần hiếm trước"
+    - "[if:choose]"
+    - "[if:choose]<yellow>Nhấn để chọn"
+
+# ---------------------------------------------------------------------
+#  Cac dong mo ta spark (dung lam khoi {spark-lines} va lenh /gacha spark)
+#  Bien : {bar} {current} {threshold} {left} {exchanges} {rarity} {pity} {total}
+#  Dieu kien: enabled (banner co spark), ready (da du diem de doi)
+# ---------------------------------------------------------------------
+spark-lines:
+  - "[if:!enabled]<gray>Banner này không có spark."
+  - "[if:!enabled]<gray>Tổng lượt đã quay: <white>{total}"
+  - "[if:enabled]<gray>Tiến độ: {bar} <white>{current}<gray>/<white>{threshold}"
+  - "[if:ready]<green>Đã đủ điểm: có thể đổi {exchanges} lần."
+  - "[if:enabled][if:!ready]<gray>Còn <white>{left}<gray> lượt nữa để đổi."
+  - "[if:enabled]<gray>Đổi lấy 1 vật phẩm {rarity}<gray> do bạn tự chọn."
+  - "[if:enabled]<gray>Từ lần {rarity}<gray> gần nhất: <white>{pity}<gray> lượt"
+  - "[if:enabled]<gray>Tổng lượt đã quay: <white>{total}"
+
+# Quy tac spark (nut "Quy tac Spark" trong man hinh ty le)
+#  Bien : {threshold} {rarity} {ten-rarity}
+#  Dieu kien: enabled, featured (banner co vat pham noi bat), ten-guarantee
+spark-rules:
+  - "[if:!enabled]<gray>Banner này không có spark."
+  - "[if:enabled]<gray>Mỗi lượt quay tích <white>1<gray> điểm spark."
+  - "[if:enabled]<gray>Đủ <white>{threshold}<gray> điểm: đổi 1 vật phẩm {rarity}<gray>."
+  - "[if:enabled][if:featured]<gray>Chỉ chọn trong các vật phẩm <yellow>nổi bật<gray>."
+  - "[if:enabled][if:!featured]<gray>Chọn trong mọi vật phẩm cùng độ hiếm."
+  - "[if:enabled]<gray>Ra {rarity}<gray> khi quay <white>không<gray> làm mất điểm spark."
+  - "[if:enabled][if:ten-guarantee]<gray>Quay x10 đảm bảo ≥ 1 vật phẩm {ten-rarity}<gray> trở lên."
+  - "[if:enabled]<dark_gray>Spark tính riêng cho từng banner."
+
+# ---------------------------------------------------------------------
+#  Menu chinh (/gacha)
+# ---------------------------------------------------------------------
+main:
+  title: "<dark_gray>✦ <gradient:#ffb347:#ffcc33>Gacha Hàng Tuần</gradient> <dark_gray>✦"
+  rows: 6
+
+  # Thanh chon banner. Hinh dang lay tu icon cua banner (trong banners.yml).
+  # Bien : {banner} {remaining} {cost} {max} {rarity}
+  # Dieu kien: limited, normal, limit (banner gioi han luot), guarantee (luon ra do hiem toi thieu), selected
+  banner-tab:
+    center-slot: 13
+    max: 7
+    name: "{banner}"
+    glow: selected             # chi sang khi dang chon
+    lore:
+      - "[if:limited]<light_purple>✦ Banner giới hạn"
+      - "[if:normal]<green>✦ Banner thường (vĩnh viễn)"
+      - "[if:limited]<gray>Còn lại: <white>{remaining}"
+      - "<gray>Quay x1: <gold>{cost}"
+      - "[if:limit]<gray>Giới hạn: <white>{max}<gray> lượt/người"
+      - "[if:guarantee]<gray>Chắc chắn ra {rarity}"
+      - "[if:selected]<yellow>▶ Đang chọn"
+      - "[if:!selected]<yellow>Nhấn để chọn"
+
+  # Thong tin banner dang chon. Khoi {description} = mo ta trong banners.yml.
+  # Bien : {banner} {cycle} {remaining} {rarity} {used} {max}
+  # Dieu kien: limited, normal, override (admin chon tay), guarantee, limit
+  banner-info:
+    slot: 22
+    name: "{banner}"
+    glow: true
+    lore:
+      - "{description}"
+      - ""
+      - "[if:limited]<gray>Chu kỳ #{cycle} — còn lại <white>{remaining}"
+      - "[if:limited][if:override]<gray>(Banner do quản trị viên chọn)"
+      - "[if:normal]<gray>Banner vĩnh viễn."
+      - "[if:guarantee]<gray>Mọi lượt quay chắc chắn ra {rarity}<gray> trở lên."
+      - "[if:limit]<gray>Giới hạn: <white>{used}<gray>/<white>{max}<gray> lượt đã dùng."
+
+  # Hai o trung bay vat pham noi bat (dung reward-card)
+  showcase-slots: [21, 23]
+
+  # Nut quay x1.  Bien: {cost} {balance}
+  pull-single:
+    slot: 29
+    material: EMERALD
+    name: "<green><bold>Quay x1"
+    lore:
+      - "<gray>Chi phí: <gold>{cost}"
+      - "<gray>Bạn có: <white>{balance}"
+      - ""
+      - "<yellow>Nhấn để quay"
+  # Thay cho nut quay x1 khi het luot (banner gioi han luot).  Bien: {max}
+  pull-single-exhausted:
+    slot: 29
+    material: BARRIER
+    name: "<red><bold>Đã hết lượt quay"
+    lore:
+      - "<gray>Bạn đã dùng hết <white>{max}<gray> lượt của banner này."
+
+  # Nut quay x10.  Bien: {cost} {balance} {saved} {ten-rarity}
+  # Dieu kien: ten-guarantee (x10 dam bao do hiem toi thieu), saving (gia x10 re hon 10 lan x1)
+  pull-ten:
+    slot: 33
+    material: DIAMOND
+    amount: 10
+    name: "<aqua><bold>Quay x10"
+    lore:
+      - "<gray>Chi phí: <gold>{cost}"
+      - "<gray>Bạn có: <white>{balance}"
+      - "[if:ten-guarantee]<gray>Đảm bảo ít nhất 1 vật phẩm {ten-rarity}<gray> trở lên."
+      - "[if:saving]<gray>Tiết kiệm: <green>{saved}"
+      - ""
+      - "<yellow>Nhấn để quay"
+  # Thay cho nut x10 khi khong the quay x10.  Bien: {max}   Dieu kien: limit
+  pull-ten-unavailable:
+    slot: 33
+    material: GRAY_DYE
+    name: "<gray><bold>Quay x10 không khả dụng"
+    lore:
+      - "[if:limit]<gray>Banner này giới hạn <white>{max}<gray> lượt/người."
+      - "[if:!limit]<gray>Không đủ lượt còn lại."
+
+  # Spark. Khoi {spark-lines} lay tu muc spark-lines o tren.
+  spark-ready:                 # khi da du diem doi
+    slot: 31
+    material: NETHER_STAR
+    name: "<gold><bold>SPARK — Sẵn sàng đổi!"
+    glow: true
+    lore:
+      - "{spark-lines}"
+      - ""
+      - "<yellow>Nhấn để chọn vật phẩm và đổi!"
+  spark-progress:              # khi chua du diem
+    slot: 31
+    material: EXPERIENCE_BOTTLE
+    name: "<yellow><bold>Spark"
+    lore:
+      - "{spark-lines}"
+
+  rates-button:
+    slot: 38
+    material: BOOK
+    name: "<white><bold>Tỷ lệ vật phẩm"
+    lore:
+      - "<gray>Xem tỷ lệ riêng của từng vật phẩm."
+  animation-on:                # hien khi hoat anh dang bat
+    slot: 40
+    material: LIME_DYE
+    name: "<white><bold>Hoạt ảnh: <green>Bật"
+    lore:
+      - "<gray>Hoạt ảnh lật thẻ khi quay."
+      - "<yellow>Nhấn để bật/tắt"
+  animation-off:               # hien khi hoat anh dang tat
+    slot: 40
+    material: GRAY_DYE
+    name: "<white><bold>Hoạt ảnh: <red>Tắt"
+    lore:
+      - "<gray>Hoạt ảnh lật thẻ khi quay."
+      - "<yellow>Nhấn để bật/tắt"
+  history-button:
+    slot: 42
+    material: WRITABLE_BOOK
+    name: "<white><bold>Lịch sử quay"
+    lore:
+      - "<gray>Các lượt quay gần đây của bạn."
+  close-button:
+    slot: 49
+    material: BARRIER
+    name: "<red><bold>Đóng"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Chon vat pham de doi spark
+# ---------------------------------------------------------------------
+spark-select:
+  title: "<dark_gray>Spark — chọn vật phẩm"
+  rows: 4
+  center-slot: 13
+  max: 7
+  back:
+    slot: 31
+    material: OAK_DOOR
+    name: "<yellow>Quay lại"
+    lore: []
+
+# Xac nhan doi spark.  Bien: {threshold}
+spark-confirm:
+  title: "<dark_gray>Xác nhận đổi spark"
+  rows: 3
+  reward-slot: 13
+  confirm:
+    slot: 11
+    material: LIME_CONCRETE
+    name: "<green><bold>Xác nhận"
+    lore:
+      - "<gray>Trừ <white>{threshold}<gray> điểm spark."
+  cancel:
+    slot: 15
+    material: RED_CONCRETE
+    name: "<red><bold>Huỷ"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Nut chuyen trang (man hinh ty le va lich su; luon o hang cuoi)
+#  Bien cua nav.back: {page} {pages}   Dieu kien: paged (man hinh co nhieu trang)
+# ---------------------------------------------------------------------
+nav:
+  prev:
+    slot: 48
+    material: ARROW
+    name: "<yellow>◀ Trang trước"
+    lore: []
+  back:
+    slot: 49
+    material: OAK_DOOR
+    name: "<yellow>Quay lại"
+    lore:
+      - "[if:paged]<gray>Trang {page}/{pages}"
+  next:
+    slot: 50
+    material: ARROW
+    name: "<yellow>Trang sau ▶"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Man hinh ty le.  Bien tieu de: {banner}
+#  (45 o dau hien vat pham, hang cuoi la nut dieu huong)
+# ---------------------------------------------------------------------
+rates:
+  title: "<dark_gray>Tỷ lệ — {banner}"
+  rules-button:                # khoi lore {spark-rules} lay tu muc spark-rules o tren
+    slot: 53
+    material: PAPER
+    name: "<yellow><bold>Quy tắc Spark"
+    lore:
+      - "{spark-rules}"
+
+# ---------------------------------------------------------------------
+#  Lich su quay.  Bien tieu de: {page}
+#  Hinh dang cua the lay tu vat pham da quay.
+#  Bien the: {name} {rarity} {rarity-color} {banner} {cycle} {pity} {time}
+#  Dieu kien: spark (lan nhan nay la doi bang spark)
+# ---------------------------------------------------------------------
+history:
+  title: "<dark_gray>Lịch sử quay — trang {page}"
+  entry:
+    name: "{rarity-color}{name}"
+    lore:
+      - "<gray>Độ hiếm: {rarity}"
+      - "<gray>Banner: {banner}"
+      - "<gray>Chu kỳ: <white>#{cycle}"
+      - "[if:!spark]<gray>Ra sau: <white>{pity}<gray> lượt kể từ lần hiếm trước"
+      - "[if:spark]<aqua>Đổi bằng spark"
+      - "<dark_gray>{time}"
+  empty:
+    slot: 22
+    material: BARRIER
+    name: "<gray>Chưa có lượt quay nào"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Man hinh ket qua quay.  Bien tieu de: {count}
+# ---------------------------------------------------------------------
+result:
+  title: "<dark_gray>Kết quả quay x{count}"
+  rows: 4
+  slots-single: [13]                              # vi tri the khi quay x1
+  slots-multi: [11, 12, 13, 14, 15, 20, 21, 22, 23, 24]   # vi tri 10 the khi quay x10
+  # Tom tat.  Bien: {count} {banner-plain}.  Khoi {rarity-lines}: moi do hiem co mat 1 dong theo rarity-line
+  summary:
+    slot: 4
+    material: NETHER_STAR
+    name: "<gold><bold>Kết quả quay x{count}"
+    lore:
+      - "<gray>Banner: <white>{banner-plain}"
+      - "{rarity-lines}"
+  rarity-line: "{rarity}<gray>: <white>{count}"    # Bien: {rarity} {count}
+  skip:                        # nut Bo qua trong luc chay hoat anh
+    slot: 31
+    material: BARRIER
+    name: "<red><bold>Bỏ qua"
+    lore:
+      - "<gray>Hiện ngay toàn bộ kết quả."
+  back:
+    slot: 30
+    material: OAK_DOOR
+    name: "<yellow>Quay lại"
+    lore: []
+  # Nut quay tiep.  Bien: {count} {cost} {balance}
+  again-single:
+    slot: 32
+    material: EMERALD
+    name: "<green><bold>Quay tiếp x{count}"
+    lore:
+      - "<gray>Chi phí: <gold>{cost}"
+      - "<gray>Bạn có: <white>{balance}"
+  again-ten:
+    slot: 32
+    material: DIAMOND
+    name: "<green><bold>Quay tiếp x{count}"
+    lore:
+      - "<gray>Chi phí: <gold>{cost}"
+      - "<gray>Bạn có: <white>{balance}"
+
+# ---------------------------------------------------------------------
+#  Hoat anh lat the (thoi gian chinh o config.yml, muc animation)
+# ---------------------------------------------------------------------
+animation:
+  card-back:                   # the up luc dang xao tron
+    material: GRAY_STAINED_GLASS_PANE
+    name: "<dark_gray>?"
+  glow-pane-name: "{rarity-color}✦"   # ten tam kinh sang theo do hiem truoc khi lat. Bien: {rarity-color}
+  spin-palette:                # cac mau the nhap nhay luc xao tron
+    - LIGHT_GRAY_STAINED_GLASS_PANE
+    - LIME_STAINED_GLASS_PANE
+    - LIGHT_BLUE_STAINED_GLASS_PANE
+    - PURPLE_STAINED_GLASS_PANE
+    - ORANGE_STAINED_GLASS_PANE
+    - MAGENTA_STAINED_GLASS_PANE
+    - CYAN_STAINED_GLASS_PANE
+    - YELLOW_STAINED_GLASS_PANE
+  flash:                       # vien nhap nhay khi lat the hiem
+    materials: [ORANGE_STAINED_GLASS_PANE, YELLOW_STAINED_GLASS_PANE]
+    slots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 27, 28, 29, 30, 32, 33, 34, 35]
+    count:                     # so lan nhap nhay theo do hiem (0 = khong nhap nhay)
+      COMMON: 0
+      UNCOMMON: 0
+      RARE: 0
+      EPIC: 3
+      LEGENDARY: 6
+
+# ---------------------------------------------------------------------
+#  Am thanh.  Moi phan tu: "khoa-am-thanh am-luong cao-do"  (am luong, cao do co the bo).
+#  Khoa am thanh la ten tren wiki Minecraft, vd block.note_block.pling. Ghi "none" de tat.
+# ---------------------------------------------------------------------
+sounds:
+  spin:                        # tieng "tach" luc xao tron, cao do tang dan
+    sound: "block.note_block.hat"
+    volume: 0.6
+    pitch-start: 0.7
+    pitch-step: 0.05
+    pitch-max: 2.0
+  tint:                        # khi the sang theo do hiem (truoc khi lat)
+    COMMON: ["block.note_block.pling 0.8 0.9"]
+    UNCOMMON: ["block.note_block.pling 0.8 1.1"]
+    RARE: ["block.note_block.pling 0.9 1.4"]
+    EPIC: ["block.note_block.pling 1.0 1.8"]
+    LEGENDARY: ["block.beacon.activate 1.0 1.2"]
+  reveal:                      # khi lat the
+    COMMON: ["entity.experience_orb.pickup 0.8 1.0"]
+    UNCOMMON: ["entity.experience_orb.pickup 0.8 1.0"]
+    RARE: ["block.amethyst_block.chime 1.0 1.2"]
+    EPIC: ["entity.player.levelup 1.0 1.0"]
+    LEGENDARY:
+      - "ui.toast.challenge_complete 1.0 1.0"
+      - "entity.firework_rocket.blast 1.0 1.0"
+  result-high-rarity: EPIC     # tu do hiem nay tro len thi dung am thanh result-high khi hien ket qua
+  result-high: ["ui.toast.challenge_complete 1.0 1.0"]
+  result-normal: ["entity.player.levelup 1.0 1.0"]
+  spark-exchanged: ["ui.toast.challenge_complete 1.0 1.0"]
