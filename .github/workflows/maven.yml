@@ -42,5 +42,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: WeeklyGacha
-          path: WeeklyGacha/target/*.jar
+          path: WeeklyGacha/target/LimbusStatus.jar
           if-no-files-found: error
