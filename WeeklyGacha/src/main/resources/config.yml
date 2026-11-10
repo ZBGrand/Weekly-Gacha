@@ -1,0 +1,112 @@
+# =====================================================================
+#  WeeklyGacha - cau hinh chinh (config.yml)
+#
+#  Plugin dung 4 file cau hinh trong thu muc plugins/WeeklyGacha/:
+#    config.yml    cai dat chung, tien Lunacy + cua hang, hoat anh, chu ky banner   (file nay)
+#    banners.yml   danh sach banner, vat pham, ty le, chi phi, spark
+#    messages.yml  tin nhan chat / lenh
+#    gui.yml       giao dien: chu, vat pham, vi tri o, am thanh, hoat anh
+#  Sau khi sua bat ky file nao, chay /gachaadmin reload.
+# =====================================================================
+
+settings:
+  # Thoi gian cho giua 2 lan quay (ms) de chong spam click
+  pull-cooldown-ms: 500
+  # Do hiem nao se duoc thong bao toan server (co the ghi de bang "broadcast: true/false" o tung vat pham)
+  broadcast-rarities: [LEGENDARY]
+
+# ---------------------------------------------------------------------
+#  Lunacy - don vi tien RIENG cua plugin (luu trong plugins/WeeklyGacha/data.db).
+#  - Banner tru Lunacy khi cost.type: LUNACY (banners.yml).
+#  - Nguoi choi mua Lunacy bang PlayerPoints: /lunacy shop (GUI) hoac /lunacy buy <goi|so luong>.
+#  - Phat thuong Lunacy: lenh /gachaadmin lunacy give <nguoi choi> <so> [-s]
+#      (dung duoc tu console va cho nguoi choi offline -> gan vao plugin vote / quest / crate / daily...)
+#    hoac vat pham trong banner voi provider: LUNACY (xem banners.yml).
+#  - PlaceholderAPI: %weeklygacha_lunacy%, %weeklygacha_lunacy_formatted% ... (xem README).
+# ---------------------------------------------------------------------
+lunacy:
+  name: "<gradient:#ff8a80:#b3121b>Lunacy</gradient>"   # ten don vi (MiniMessage)
+  symbol: "☾"                  # ky hieu, dung trong mau gui.yml format.lunacy
+  icon: REDSTONE               # icon mac dinh cua phan thuong LUNACY trong banner
+  thousands-separator: ","     # 12,345 ; de "" neu khong muon phan cach
+  notify-receive: true         # bao cho nguoi choi khi duoc admin / plugin khac phat Lunacy
+  leaderboard-size: 10         # so hang cua bang xep hang (/lunacy top, %weeklygacha_top_<hang>_name%)
+  leaderboard-empty: "-"       # hien khi hang do chua co ai
+
+  # Cua hang: doi PlayerPoints -> Lunacy (can plugin PlayerPoints). Lunacy KHONG doi nguoc lai duoc.
+  shop:
+    enabled: true
+    # Mua so luong tuy y: /lunacy buy <so>. Gia = so Lunacy x points-per-lunacy (lam tron len).
+    custom:
+      enabled: true
+      points-per-lunacy: 1.0
+      min: 10
+      max: 100000
+    # Cac goi trong GUI. Khoa = ID goi (dung trong /lunacy buy <id>).
+    #   amount: so Lunacy   bonus: thuong them   price: so diem PlayerPoints
+    #   material / name / lore / glow: hinh dang (de trong name => dung mau trong gui.yml shop.package.name)
+    #   slot: o rieng trong GUI (bo trong => xep lan luot vao gui.yml shop.package-slots)
+    #   Bien dung duoc trong name/lore: {amount} {bonus} {total} {price}
+    packages:
+      pouch:
+        amount: 100
+        price: 100
+        material: REDSTONE
+        name: "<#ff8a80>ᴘᴏᴜᴄʜ ᴏғ ʟᴜɴᴀᴄʏ"
+      satchel:
+        amount: 500
+        bonus: 25
+        price: 500
+        material: NETHER_WART
+        name: "<#ff6b6b>sᴀᴛᴄʜᴇʟ ᴏғ ʟᴜɴᴀᴄʏ"
+      chest:
+        amount: 1000
+        bonus: 80
+        price: 1000
+        material: REDSTONE_BLOCK
+        name: "<#ff3b3b>ᴄʜᴇsᴛ ᴏғ ʟᴜɴᴀᴄʏ"
+      vault:
+        amount: 3000
+        bonus: 300
+        price: 3000
+        material: FIRE_CHARGE
+        name: "<#e0303a>ᴠᴀᴜʟᴛ ᴏғ ʟᴜɴᴀᴄʏ"
+        glow: true
+      hoard:
+        amount: 5000
+        bonus: 650
+        price: 5000
+        material: NETHER_STAR
+        name: "<gradient:#ff8a80:#b3121b><bold>ʜᴏᴀʀᴅ ᴏғ ʟᴜɴᴀᴄʏ"
+        glow: true
+        lore:
+          - "<gold>★ ʙᴇsᴛ ᴠᴀʟᴜᴇ"
+
+# ---------------------------------------------------------------------
+#  Hoat anh quay kieu Limbus Company (xao the -> the phat sang theo do hiem -> lat the)
+#  O day chi chinh THOI GIAN (don vi tick, 20 tick = 1 giay) va bat/tat. Hinh anh, mau, am thanh: xem gui.yml.
+#  Nguoi choi co the tat rieng cho minh bang /gacha animation.
+#  Qua chi duoc trao SAU khi hoat anh chay xong (hoac khi bam Bo qua / dong GUI / thoat game / tat server).
+# ---------------------------------------------------------------------
+animation:
+  enabled: true
+  spin-ticks: 24
+  reveal-delay-ticks: 6
+  top-pause-ticks: 14
+
+# ---------------------------------------------------------------------
+#  Chu ky banner gioi han
+# ---------------------------------------------------------------------
+cycle:
+  # Moc bat dau chu ky dau tien. Dinh dang: yyyy-MM-dd hoac "yyyy-MM-dd HH:mm".
+  # De trong => dung thoi diem plugin chay lan dau.
+  # Luu y: neu admin da dung /gachaadmin restartcycle thi moc luu trong data.db se duoc uu tien.
+  start-date: "2026-10-13"
+  timezone: "Asia/Ho_Chi_Minh"
+  length-days: 14
+  # Thu tu xoay vong cua cac banner type LIMITED (de trong => tat ca banner LIMITED theo thu tu khai bao)
+  # Hien chi co 1 banner gioi han; them banner LIMITED khac vao day de xoay vong moi 14 ngay.
+  rotation: [new_item_target_extraction]
+  # true: banner do admin chon thu cong chi co hieu luc den het chu ky hien tai
+  # false: giu mai cho den khi dung /gachaadmin auto
+  clear-override-on-new-cycle: true
