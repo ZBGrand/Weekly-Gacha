@@ -1,0 +1,763 @@
+# =====================================================================
+#  WeeklyGacha 1.5.0 - giao dien (gui.yml)
+#  Sua file nay roi chay /gachaadmin reload (khong can build lai plugin).
+#
+#  CACH VIET
+#   - Chu dung MiniMessage: <gold>, <bold>, <gradient:#ff5f6d:#ffc371>, <#F4B554> ...
+#   - {ten} la bien do plugin dien vao. Moi muc ben duoi ghi ro co nhung bien nao.
+#   - Dong lore bat dau bang [if:dieu-kien] chi hien khi dieu kien bat,
+#     [if:!dieu-kien] chi hien khi dieu kien tat. Co the ghep: [if:a][if:!b]text
+#   - Dong lore chi gom mot khoi, vi du {description}, se duoc thay bang nhieu dong.
+#   - Moi vat pham co: material, amount, name, lore, glow (true/false), slot (o trong GUI).
+#     Them (1.5.0): custom-model-data: <so> (cho resource pack), hide-tooltip: true (khong hien khung khi re chuot).
+#     Dat "enabled: false" de an vat pham do. Slot di tu 0 (tren-trai) toi 8 (tren-phai),
+#     hang 2 bat dau o 9, ... hang 6 bat dau o 45.
+#   - Danh sach o co the viet khoang: ["10-16", "19-25"] = 10,11,...,16,19,...,25
+#   - Muc nao bi xoa se tu lay lai gia tri mac dinh cua plugin.
+#
+#  LAYOUT (moi tu 1.5.0)
+#   Moi menu co "layout": danh sach dong, moi dong 9 ky tu = 9 o. Moi ky tu la mot "decor"
+#   (mieng trang tri) khai bao o muc "decor" ben duoi. Nut va vat pham that duoc dat DE LEN layout.
+#     - Ky tu khoang trang hoac dau cham "." = de nen filler.
+#     - Muon tro lai kieu cu (phu kin filler) thi ghi: layout: []
+#   Decor co the DONG (doi hinh lien tuc) khi co "frames" (danh sach chat lieu):
+#     mode: chase   chay vong quanh GUI theo chieu kim dong ho (frames[0] la "dau", cac frame sau la "duoi")
+#           blink   tat ca o cung doi hinh mot luc
+#           wave    song chay tu trai sang phai theo cot
+#           random  moi o doi hinh ngau nhien
+#     speed: so nhip (1 nhip = 2 tick = 0.1 giay) giua 2 lan doi hinh
+#   Thu tu tim decor cua mot ky tu: themes.<id-banner>.decor -> <menu>.decor -> decor (chung).
+#
+#  THEME THEO BANNER (moi tu 1.5.0)
+#   themes.<id-banner>.decor ghi de decor khi nguoi choi dang xem banner do
+#   (menu chinh, ty le, spark, ket qua quay). Vi du doi mau vien chay cho tung banner.
+# =====================================================================
+
+# ---------------------------------------------------------------------
+#  Chung
+# ---------------------------------------------------------------------
+general:
+  filler:                      # nen cua cac o "." / khoang trang trong layout (va menu khong co layout)
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+    hide-tooltip: true
+  background:                  # nen cua man hinh ket qua quay
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+    hide-tooltip: true
+
+# ---------------------------------------------------------------------
+#  Decor dung chung cho moi layout (decor luon an khung tooltip, tru khi ghi hide-tooltip: false)
+# ---------------------------------------------------------------------
+decor:
+  "#":                         # nen toi
+    material: BLACK_STAINED_GLASS_PANE
+  "=":                         # o trong / be do (xam)
+    material: GRAY_STAINED_GLASS_PANE
+  "o":                         # diem nhan ho phach
+    material: ORANGE_STAINED_GLASS_PANE
+  "y":
+    material: YELLOW_STAINED_GLASS_PANE
+  "r":
+    material: RED_STAINED_GLASS_PANE
+  "~":                         # vien chay vong quanh GUI (2 "sao choi" mau ho phach)
+    material: BLACK_STAINED_GLASS_PANE
+    mode: chase
+    speed: 2
+    frames:
+      - YELLOW_STAINED_GLASS_PANE
+      - ORANGE_STAINED_GLASS_PANE
+      - BROWN_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+      - BLACK_STAINED_GLASS_PANE
+  "*":                         # den nhap nhay
+    material: ORANGE_STAINED_GLASS_PANE
+    mode: blink
+    speed: 6
+    frames: [ORANGE_STAINED_GLASS_PANE, YELLOW_STAINED_GLASS_PANE]
+
+# ---------------------------------------------------------------------
+#  Theme theo banner: ghi de decor khi dang xem banner do. Khoa la ID banner trong banners.yml.
+#  Banner khong co o day dung decor chung o tren.
+# ---------------------------------------------------------------------
+themes:
+  standard_extraction:         # banner thuong: vien xanh la
+    decor:
+      "~":
+        material: BLACK_STAINED_GLASS_PANE
+        mode: chase
+        speed: 2
+        frames: [LIME_STAINED_GLASS_PANE, GREEN_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE]
+      "o":
+        material: LIME_STAINED_GLASS_PANE
+      "*":
+        material: GREEN_STAINED_GLASS_PANE
+        mode: blink
+        speed: 6
+        frames: [GREEN_STAINED_GLASS_PANE, LIME_STAINED_GLASS_PANE]
+  new_item_target_extraction:  # banner gioi han: vien do -> cam (giong mau ten banner)
+    decor:
+      "~":
+        material: BLACK_STAINED_GLASS_PANE
+        mode: chase
+        speed: 2
+        frames: [ORANGE_STAINED_GLASS_PANE, RED_STAINED_GLASS_PANE, RED_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE]
+      "o":
+        material: RED_STAINED_GLASS_PANE
+      "*":
+        material: RED_STAINED_GLASS_PANE
+        mode: blink
+        speed: 6
+        frames: [RED_STAINED_GLASS_PANE, ORANGE_STAINED_GLASS_PANE]
+  assured_extraction:          # (neu ban them lai banner nay) vien vang kim
+    decor:
+      "~":
+        material: BLACK_STAINED_GLASS_PANE
+        mode: chase
+        speed: 2
+        frames: [WHITE_STAINED_GLASS_PANE, YELLOW_STAINED_GLASS_PANE, YELLOW_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE]
+      "o":
+        material: YELLOW_STAINED_GLASS_PANE
+
+# Ten, mau, tam kinh (trong hoat anh va vien ket qua) cua tung do hiem. Khoa phai la COMMON ... LEGENDARY.
+rarity:
+  COMMON:
+    label: "ᴄᴏᴍᴍᴏɴ"
+    color: "<gray>"
+    pane: LIGHT_GRAY_STAINED_GLASS_PANE
+  UNCOMMON:
+    label: "ᴜɴᴄᴏᴍᴍᴏɴ"
+    color: "<green>"
+    pane: LIME_STAINED_GLASS_PANE
+  RARE:
+    label: "ʀᴀʀᴇ"
+    color: "<aqua>"
+    pane: LIGHT_BLUE_STAINED_GLASS_PANE
+  EPIC:
+    label: "ᴇᴘɪᴄ"
+    color: "<light_purple>"
+    pane: PURPLE_STAINED_GLASS_PANE
+  LEGENDARY:
+    label: "ʟᴇɢᴇɴᴅᴀʀʏ"
+    color: "<gold>"
+    pane: ORANGE_STAINED_GLASS_PANE
+
+# Dinh dang so / thoi gian / chi phi
+format:
+  day: "days"
+  hour: "hours"
+  minute: "minutes"
+  date: "dd/MM/yyyy HH:mm"      # mau ngay gio (Java DateTimeFormatter)
+  rate: "0.###"                 # mau so thap phan cua ty le (phan tram)
+  infinite: "∞"
+  lunacy: "{amount} {symbol}"   # Lunacy (tien rieng cua plugin). Bien: {amount} (da co dau phan cach) {symbol}
+  points: "{amount} ⛃"          # chi phi PlayerPoints. Bien: {amount}
+  key: "{amount}x {name}"       # chi phi bang key.     Bien: {amount} {name}
+  bar:                          # thanh tien do spark
+    cells: 20
+    filled: "<#F4B554>|"
+    empty: "<#3a3128>|"
+
+# ---------------------------------------------------------------------
+#  The vat pham (dung o ty le, ket qua quay, chon spark, trung bay banner)
+#  Bien : {name} {rarity} {rarity-color} {amount} {rate} {pity}
+#  Dieu kien: amount (so luong > 1), rate (dang hien ty le), featured (vat pham noi bat),
+#             pity (dang hien so luot ra sau lan hiem truoc), choose (dang chon spark)
+#  Hinh dang cua the lay tu chinh vat pham, nen o day khong co material.
+# ---------------------------------------------------------------------
+reward-card:
+  name: "{rarity-color}{name}"
+  lore:
+    - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+    - "<#8a7a66>ʀᴀʀɪᴛʏ <dark_gray>» {rarity}"
+    - "[if:amount]<#8a7a66>ᴀᴍᴏᴜɴᴛ <dark_gray>» <white>x{amount}"
+    - "[if:rate]<#8a7a66>ʀᴀᴛᴇ <dark_gray>» <white>{rate}%"
+    - "[if:pity]<#8a7a66>ᴏʙᴛᴀɪɴᴇᴅ ᴀғᴛᴇʀ <dark_gray>» <white>{pity} <#8a7a66>ᴘᴜʟʟs"
+    - "[if:featured]"
+    - "[if:featured]<gradient:#F4B554:#F6955D>★ ғᴇᴀᴛᴜʀᴇᴅ ɪᴛᴇᴍ"
+    - "[if:choose]"
+    - "[if:choose]<#F4B554>▶ ᴄʟɪᴄᴋ ᴛᴏ sᴇʟᴇᴄᴛ"
+
+# ---------------------------------------------------------------------
+#  Cac dong mo ta spark (dung lam khoi {spark-lines} va lenh /gacha spark)
+#  Bien : {bar} {current} {threshold} {left} {exchanges} {rarity} {pity} {total}
+#  Dieu kien: enabled (banner co spark), ready (da du diem de doi)
+# ---------------------------------------------------------------------
+spark-lines:
+  - "[if:!enabled]<gray>ᴛʜɪs ʙᴀɴɴᴇʀ ʜᴀs ɴᴏ sᴘᴀʀᴋ."
+  - "[if:!enabled]<#8a7a66>ᴛᴏᴛᴀʟ ᴘᴜʟʟs <dark_gray>» <white>{total}"
+  - "[if:enabled]{bar} <white>{current}<dark_gray>/<white>{threshold}"
+  - "[if:enabled]"
+  - "[if:ready]<#F4B554>✦ ᴇɴᴏᴜɢʜ ᴘᴏɪɴᴛs: ʏᴏᴜ ᴄᴀɴ ᴇxᴄʜᴀɴɢᴇ <white>{exchanges}<#F4B554> ᴛɪᴍᴇ(s)."
+  - "[if:enabled][if:!ready]<white>{left}<gray> ᴍᴏʀᴇ ᴘᴜʟʟ(s) ᴜɴᴛɪʟ ʏᴏᴜ ᴄᴀɴ ᴇxᴄʜᴀɴɢᴇ."
+  - "[if:enabled]<gray>ᴇxᴄʜᴀɴɢᴇ ғᴏʀ 1 {rarity}<gray> ɪᴛᴇᴍ ᴏғ ʏᴏᴜʀ ᴄʜᴏɪᴄᴇ."
+  - "[if:enabled]<#8a7a66>sɪɴᴄᴇ ᴛʜᴇ ʟᴀᴛᴇsᴛ {rarity}<dark_gray> » <white>{pity} <#8a7a66>ᴘᴜʟʟs"
+  - "[if:enabled]<#8a7a66>ᴛᴏᴛᴀʟ ᴘᴜʟʟs <dark_gray>» <white>{total}"
+
+# Quy tac spark (nut "Quy tac Spark" trong man hinh ty le)
+#  Bien : {threshold} {rarity} {ten-rarity}
+#  Dieu kien: enabled, featured (banner co vat pham noi bat), ten-guarantee
+spark-rules:
+  - "[if:!enabled]<gray>ᴛʜɪs ʙᴀɴɴᴇʀ ʜᴀs ɴᴏ sᴘᴀʀᴋ."
+  - "[if:enabled]<#F4B554>① <gray>ᴇᴀᴄʜ ᴘᴜʟʟ ɢʀᴀɴᴛs <white>1<gray> sᴘᴀʀᴋ ᴘᴏɪɴᴛ."
+  - "[if:enabled]<#F4B554>② <gray>ʀᴇᴀᴄʜ <white>{threshold}<gray> ᴘᴏɪɴᴛs: ᴇxᴄʜᴀɴɢᴇ ғᴏʀ 1 {rarity}<gray> ɪᴛᴇᴍ."
+  - "[if:enabled][if:featured]<#F4B554>③ <gray>ᴏɴʟʏ sᴇʟᴇᴄᴛᴀʙʟᴇ ᴀᴍᴏɴɢ <yellow>ғᴇᴀᴛᴜʀᴇᴅ<gray> ɪᴛᴇᴍs."
+  - "[if:enabled][if:!featured]<#F4B554>③ <gray>sᴇʟᴇᴄᴛᴀʙʟᴇ ᴀᴍᴏɴɢ ᴀʟʟ ɪᴛᴇᴍs ᴏғ ᴛʜᴇ sᴀᴍᴇ ʀᴀʀɪᴛʏ."
+  - "[if:enabled]<#F4B554>④ <gray>ᴘᴜʟʟɪɴɢ ᴀ {rarity}<gray> ᴅᴏᴇs <white>ɴᴏᴛ<gray> ʀᴇsᴇᴛ ʏᴏᴜʀ sᴘᴀʀᴋ ᴘᴏɪɴᴛs."
+  - "[if:enabled][if:ten-guarantee]<#F4B554>⑤ <gray>ᴛʜᴇ x10 ᴘᴜʟʟ ɢᴜᴀʀᴀɴᴛᴇᴇs ᴀᴛ ʟᴇᴀsᴛ 1 {ten-rarity}<gray> ᴏʀ ᴀʙᴏᴠᴇ."
+  - "[if:enabled]"
+  - "[if:enabled]<dark_gray>sᴘᴀʀᴋ ɪs ᴛʀᴀᴄᴋᴇᴅ sᴇᴘᴀʀᴀᴛᴇʟʏ ғᴏʀ ᴇᴀᴄʜ ʙᴀɴɴᴇʀ."
+
+# ---------------------------------------------------------------------
+#  Menu chinh (/gacha).  Bien tieu de: {banner}
+#
+#   ~ ~ ~ ~ @ ~ ~ ~ ~      @  = ho so nguoi choi (o 4), ▼ = dau chi banner dang chon
+#   ~ . . [B] . [B] . . ~   [B] = tab banner (cach nhau 1 o)
+#   ~ . o ★ [i] ★ o . ~    [i] = thong tin banner, ★ = vat pham noi bat
+#   ~ . x1 o SPARK o x10 . ~
+#   ~ CH . TL . LS . HA ~   CH = cua hang Lunacy, TL = ty le, LS = lich su, HA = hoat anh
+#   ~ ~ ~ ~ X ~ ~ ~ ~      X = dong
+# ---------------------------------------------------------------------
+main:
+  title: "<gradient:#F4B554:#F6955D><bold>ᴇxᴛʀᴀᴄᴛɪᴏɴ"
+  rows: 6
+  layout:
+    - "~~~~~~~~~"
+    - "~=======~"
+    - "~#o###o#~"
+    - "~##*#*##~"
+    - "~=======~"
+    - "~~~~~~~~~"
+
+  # Ho so nguoi choi: dau skin cua chinh nguoi choi. Ghi "enabled: false" de tat.
+  # Bien : {player} {lunacy} {balance} {total} {spark} {threshold} {pity} {used} {max}
+  #        ({balance} = so du theo loai chi phi cua banner dang chon, {lunacy} = so du Lunacy)
+  # Dieu kien: spark (banner co spark), limit (banner gioi han luot)
+  profile:
+    slot: 4
+    material: PLAYER_HEAD
+    name: "<gradient:#F4B554:#F6955D><bold>{player}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#c9a7ff>☾ <#8a7a66>ʟᴜɴᴀᴄʏ <dark_gray>» <#e2d2ff>{lunacy}"
+      - "<#8a7a66>ᴛᴏᴛᴀʟ ᴘᴜʟʟs <dark_gray>» <white>{total}"
+      - "<#8a7a66>sɪɴᴄᴇ ʟᴀsᴛ ʀᴀʀᴇ <dark_gray>» <white>{pity}"
+      - "[if:spark]<#8a7a66>sᴘᴀʀᴋ <dark_gray>» <white>{spark}<dark_gray>/<white>{threshold}"
+      - "[if:limit]<#8a7a66>ᴘᴜʟʟs ᴜsᴇᴅ <dark_gray>» <white>{used}<dark_gray>/<white>{max}"
+
+  # Thanh chon banner. Hinh dang lay tu icon cua banner (trong banners.yml).
+  # Vi tri: "slots: [..]" neu muon dat tay, neu khong thi can giua quanh center-slot,
+  #         spacing = khoang cach giua 2 tab (2 = chua 1 o trong).
+  # Bien : {banner} {remaining} {cost} {max} {rarity}
+  # Dieu kien: limited, normal, limit (banner gioi han luot), guarantee (luon ra do hiem toi thieu), selected
+  banner-tab:
+    center-slot: 13
+    spacing: 2
+    max: 7
+    name: "{banner}"
+    glow: selected             # chi sang khi dang chon
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "[if:limited]<light_purple>✦ ʟɪᴍɪᴛᴇᴅ ʙᴀɴɴᴇʀ"
+      - "[if:normal]<green>✦ sᴛᴀɴᴅᴀʀᴅ ʙᴀɴɴᴇʀ (ᴘᴇʀᴍᴀɴᴇɴᴛ)"
+      - "[if:limited]<#8a7a66>ʀᴇᴍᴀɪɴɪɴɢ <dark_gray>» <white>{remaining}"
+      - "<#8a7a66>ᴘᴜʟʟ x1 <dark_gray>» <#F4B554>{cost}"
+      - "[if:limit]<#8a7a66>ʟɪᴍɪᴛ <dark_gray>» <white>{max}<#8a7a66> ᴘᴜʟʟs/ᴘʟᴀʏᴇʀ"
+      - "[if:guarantee]<#8a7a66>ɢᴜᴀʀᴀɴᴛᴇᴇᴅ <dark_gray>» {rarity}"
+      - ""
+      - "[if:selected]<#F4B554>▶ sᴇʟᴇᴄᴛᴇᴅ"
+      - "[if:!selected]<#F4B554>▶ ᴄʟɪᴄᴋ ᴛᴏ sᴇʟᴇᴄᴛ"
+    # Dau chi banner dang chon: dat cach tab "offset" o (-9 = ngay o tren). Ghi "enabled: false" de tat.
+    # Chi hien neu o do khong co nut khac. Bien: {banner}
+    marker:
+      offset: -9
+      material: YELLOW_STAINED_GLASS_PANE
+      name: "<#F4B554>▼ {banner}"
+      glow: true
+
+  # Thong tin banner dang chon. Khoi {description} = mo ta trong banners.yml.
+  # Bien : {banner} {cycle} {remaining} {rarity} {used} {max}
+  # Dieu kien: limited, normal, override (admin chon tay), guarantee, limit
+  banner-info:
+    slot: 22
+    name: "{banner}"
+    glow: true
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "{description}"
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "[if:limited]<#F4B554>⌛ <#8a7a66>ᴄʏᴄʟᴇ <white>#{cycle} <dark_gray>· <white>{remaining} <#8a7a66>ʟᴇғᴛ"
+      - "[if:limited][if:override]<dark_gray>(ʙᴀɴɴᴇʀ ᴄʜᴏsᴇɴ ʙʏ ᴀɴ ᴀᴅᴍɪɴɪsᴛʀᴀᴛᴏʀ)"
+      - "[if:normal]<green>∞ <#8a7a66>ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴɴᴇʀ"
+      - "[if:guarantee]<#F4B554>✦ <#8a7a66>ᴇᴠᴇʀʏ ᴘᴜʟʟ ɢᴜᴀʀᴀɴᴛᴇᴇs {rarity}<#8a7a66> ᴏʀ ᴀʙᴏᴠᴇ"
+      - "[if:limit]<#F4B554>✦ <#8a7a66>ᴘᴜʟʟs ᴜsᴇᴅ <white>{used}<dark_gray>/<white>{max}"
+
+  # Hai o trung bay vat pham noi bat (dung reward-card)
+  showcase-slots: [21, 23]
+
+  # Nut quay x1.  Bien: {cost} {balance}
+  pull-single:
+    slot: 29
+    material: GOLD_NUGGET
+    name: "<gradient:#F4B554:#F6955D><bold>ᴘᴜʟʟ x1"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ᴄᴏsᴛ <dark_gray>» <#F4B554>{cost}"
+      - "<#8a7a66>ʏᴏᴜ ʜᴀᴠᴇ <dark_gray>» <white>{balance}"
+      - ""
+      - "<#F4B554>▶ ᴄʟɪᴄᴋ ᴛᴏ ᴘᴜʟʟ"
+  # Thay cho nut quay x1 khi het luot (banner gioi han luot).  Bien: {max}
+  pull-single-exhausted:
+    slot: 29
+    material: BARRIER
+    name: "<red><bold>ᴏᴜᴛ ᴏғ ᴘᴜʟʟs"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ʏᴏᴜ ʜᴀᴠᴇ ᴜsᴇᴅ ᴀʟʟ <white>{max}<gray> ᴘᴜʟʟs ᴏɴ ᴛʜɪs ʙᴀɴɴᴇʀ."
+
+  # Nut quay x10.  Bien: {cost} {balance} {saved} {ten-rarity}
+  # Dieu kien: ten-guarantee (x10 dam bao do hiem toi thieu), saving (gia x10 re hon 10 lan x1)
+  pull-ten:
+    slot: 33
+    material: GOLD_INGOT
+    amount: 10
+    glow: true
+    name: "<gradient:#F6955D:#ff5f6d><bold>ᴘᴜʟʟ x10"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ᴄᴏsᴛ <dark_gray>» <#F4B554>{cost}"
+      - "<#8a7a66>ʏᴏᴜ ʜᴀᴠᴇ <dark_gray>» <white>{balance}"
+      - "[if:saving]<#8a7a66>ʏᴏᴜ sᴀᴠᴇ <dark_gray>» <green>{saved}"
+      - "[if:ten-guarantee]"
+      - "[if:ten-guarantee]<#F4B554>✦ <gray>ᴀᴛ ʟᴇᴀsᴛ 1 {ten-rarity}<gray> ᴏʀ ᴀʙᴏᴠᴇ"
+      - ""
+      - "<#F4B554>▶ ᴄʟɪᴄᴋ ᴛᴏ ᴘᴜʟʟ"
+  # Thay cho nut x10 khi khong the quay x10.  Bien: {max}   Dieu kien: limit
+  pull-ten-unavailable:
+    slot: 33
+    material: GRAY_DYE
+    name: "<dark_gray><bold>ᴘᴜʟʟ x10 ᴜɴᴀᴠᴀɪʟᴀʙʟᴇ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "[if:limit]<gray>ᴛʜɪs ʙᴀɴɴᴇʀ ɪs ʟɪᴍɪᴛᴇᴅ ᴛᴏ <white>{max}<gray> ᴘᴜʟʟs/ᴘʟᴀʏᴇʀ."
+      - "[if:!limit]<gray>ɴᴏᴛ ᴇɴᴏᴜɢʜ ᴘᴜʟʟs ʀᴇᴍᴀɪɴɪɴɢ."
+
+  # Spark. Khoi {spark-lines} lay tu muc spark-lines o tren.
+  spark-ready:                 # khi da du diem doi
+    slot: 31
+    material: NETHER_STAR
+    name: "<gradient:#F4B554:#ffffff:#F4B554><bold>sᴘᴀʀᴋ — ʀᴇᴀᴅʏ!"
+    glow: true
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "{spark-lines}"
+      - ""
+      - "<#F4B554>▶ ᴄʟɪᴄᴋ ᴛᴏ sᴇʟᴇᴄᴛ ᴀɴ ɪᴛᴇᴍ ᴀɴᴅ ᴇxᴄʜᴀɴɢᴇ"
+  spark-progress:              # khi chua du diem
+    slot: 31
+    material: GLOWSTONE_DUST
+    name: "<#F4B554><bold>sᴘᴀʀᴋ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "{spark-lines}"
+
+  # Cua hang Lunacy (an khi lunacy.shop.enabled: false trong config.yml).  Bien: {lunacy}
+  shop-button:
+    slot: 37
+    material: AMETHYST_SHARD
+    glow: true
+    name: "<gradient:#e2d2ff:#9b7bff><bold>ʟᴜɴᴀᴄʏ sʜᴏᴘ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ʏᴏᴜ ʜᴀᴠᴇ <dark_gray>» <#e2d2ff>{lunacy}"
+      - "<gray>ᴇxᴄʜᴀɴɢᴇ ᴘʟᴀʏᴇʀᴘᴏɪɴᴛs ғᴏʀ ʟᴜɴᴀᴄʏ."
+      - ""
+      - "<#c9a7ff>▶ ᴄʟɪᴄᴋ ᴛᴏ ᴏᴘᴇɴ"
+  rates-button:
+    slot: 39
+    material: KNOWLEDGE_BOOK
+    name: "<#F4B554><bold>ɪᴛᴇᴍ ʀᴀᴛᴇs"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ᴠɪᴇᴡ ᴛʜᴇ ɪɴᴅɪᴠɪᴅᴜᴀʟ ʀᴀᴛᴇ ᴏғ ᴇᴀᴄʜ ɪᴛᴇᴍ."
+  animation-on:                # hien khi hoat anh dang bat
+    slot: 43
+    material: ENDER_EYE
+    name: "<#F4B554><bold>ᴀɴɪᴍᴀᴛɪᴏɴ <dark_gray>» <green>ᴏɴ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ᴄᴀʀᴅ-ғʟɪᴘ ᴀɴɪᴍᴀᴛɪᴏɴ ᴡʜᴇɴ ᴘᴜʟʟɪɴɢ."
+      - ""
+      - "<#F4B554>▶ ᴄʟɪᴄᴋ ᴛᴏ ᴛᴏɢɢʟᴇ"
+  animation-off:               # hien khi hoat anh dang tat
+    slot: 43
+    material: ENDER_PEARL
+    name: "<#F4B554><bold>ᴀɴɪᴍᴀᴛɪᴏɴ <dark_gray>» <red>ᴏғғ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ᴄᴀʀᴅ-ғʟɪᴘ ᴀɴɪᴍᴀᴛɪᴏɴ ᴡʜᴇɴ ᴘᴜʟʟɪɴɢ."
+      - ""
+      - "<#F4B554>▶ ᴄʟɪᴄᴋ ᴛᴏ ᴛᴏɢɢʟᴇ"
+  history-button:
+    slot: 41
+    material: WRITABLE_BOOK
+    name: "<#F4B554><bold>ᴘᴜʟʟ ʜɪsᴛᴏʀʏ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ʏᴏᴜʀ ʀᴇᴄᴇɴᴛ ᴘᴜʟʟs."
+  close-button:
+    slot: 49
+    material: BARRIER
+    name: "<red><bold>ᴄʟᴏsᴇ"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Chon vat pham de doi spark.  Bien tieu de: {banner}
+# ---------------------------------------------------------------------
+spark-select:
+  title: "<gradient:#F4B554:#F6955D><bold>sᴘᴀʀᴋ</bold></gradient> <dark_gray>— ᴄʜᴏᴏsᴇ ᴀɴ ɪᴛᴇᴍ"
+  rows: 4
+  center-slot: 13
+  max: 7
+  layout:
+    - "~~~~~~~~~"
+    - "~=======~"
+    - "~#######~"
+    - "~~~~~~~~~"
+  back:
+    slot: 31
+    material: DARK_OAK_DOOR
+    name: "<#F4B554>◀ ɢᴏ ʙᴀᴄᴋ"
+    lore: []
+
+# Xac nhan doi spark.  Bien: {threshold}   Bien tieu de: {banner}
+spark-confirm:
+  title: "<gradient:#F4B554:#F6955D><bold>sᴘᴀʀᴋ</bold></gradient> <dark_gray>— ᴄᴏɴғɪʀᴍ"
+  rows: 3
+  reward-slot: 13
+  layout:
+    - "~~~~~~~~~"
+    - "~##o#o##~"
+    - "~~~~~~~~~"
+  confirm:
+    slot: 11
+    material: LIME_CONCRETE
+    name: "<green><bold>ᴄᴏɴғɪʀᴍ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ᴄᴏsᴛs <white>{threshold}<gray> sᴘᴀʀᴋ ᴘᴏɪɴᴛs."
+  cancel:
+    slot: 15
+    material: RED_CONCRETE
+    name: "<red><bold>ᴄᴀɴᴄᴇʟ"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Cua hang Lunacy (/lunacy shop hoac nut o menu chinh). Gia va goi nam o config.yml (lunacy.shop).
+#
+#   ~ ~ ~ ~ $ ~ ~ ~ ~      $ = vi cua nguoi choi
+#   ~ . . . . . . . ~
+#   ~ . 1 2 3 4 5 . ~      cac goi (package-slots, hoac "slot" rieng cua tung goi trong config.yml)
+#   ~ . . . ? . . . ~      ? = huong dan mua so luong tuy y (/lunacy buy <so>)
+#   ~ ~ ~ ~ < ~ ~ ~ ~      < = quay lai
+# ---------------------------------------------------------------------
+shop:
+  title: "<gradient:#e2d2ff:#9b7bff><bold>ʟᴜɴᴀᴄʏ</bold></gradient> <dark_gray>— sʜᴏᴘ"
+  rows: 5
+  layout:
+    - "~~~~~~~~~"
+    - "~=======~"
+    - "~#.....#~"
+    - "~=======~"
+    - "~~~~~~~~~"
+  decor:                       # vien cua cua hang mang mau Lunacy (tim)
+    "~":
+      material: BLACK_STAINED_GLASS_PANE
+      mode: chase
+      speed: 2
+      frames: [WHITE_STAINED_GLASS_PANE, MAGENTA_STAINED_GLASS_PANE, PURPLE_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE]
+  package-slots: ["20-24"]
+  # Vi.  Bien: {player} {lunacy} {points}   Dieu kien: playerpoints (PlayerPoints dang bat)
+  balance:
+    slot: 4
+    material: PLAYER_HEAD
+    name: "<gradient:#e2d2ff:#9b7bff><bold>ᴡᴀʟʟᴇᴛ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#c9a7ff>☾ <#8a7a66>ʟᴜɴᴀᴄʏ <dark_gray>» <#e2d2ff>{lunacy}"
+      - "[if:playerpoints]<#F4B554>⛃ <#8a7a66>ᴘʟᴀʏᴇʀᴘᴏɪɴᴛs <dark_gray>» <white>{points}"
+      - "[if:!playerpoints]<red>ᴘʟᴀʏᴇʀᴘᴏɪɴᴛs ɪs ɴᴏᴛ ɪɴsᴛᴀʟʟᴇᴅ."
+  # Hinh dang cua goi: material / name / glow / lore rieng nam o config.yml.
+  # Bien : {id} {amount} {bonus} {total} {price} {points}
+  # Dieu kien: bonus (goi co thuong them), affordable (du diem de mua), playerpoints
+  # Khoi {extra} = lore rieng cua goi trong config.yml.
+  package:
+    name: "<#e2d2ff>{total}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ʟᴜɴᴀᴄʏ <dark_gray>» <#e2d2ff>{amount}"
+      - "[if:bonus]<#8a7a66>ʙᴏɴᴜs <dark_gray>» <green>+{bonus}"
+      - "[if:bonus]<#8a7a66>ᴛᴏᴛᴀʟ <dark_gray>» <#e2d2ff><bold>{total}"
+      - "{extra}"
+      - ""
+      - "<#8a7a66>ᴘʀɪᴄᴇ <dark_gray>» <#F4B554>{price}"
+      - "[if:affordable]<#c9a7ff>▶ ᴄʟɪᴄᴋ ᴛᴏ ʙᴜʏ"
+      - "[if:playerpoints][if:!affordable]<red>✖ ɴᴏᴛ ᴇɴᴏᴜɢʜ ᴘʟᴀʏᴇʀᴘᴏɪɴᴛs <dark_gray>(<white>{points}<dark_gray>)"
+  # Huong dan mua so luong tuy y (an khi lunacy.shop.custom.enabled: false).  Bien: {rate} {per} {min} {max}
+  custom:
+    slot: 31
+    material: WRITABLE_BOOK
+    name: "<#e2d2ff><bold>ᴄᴜsᴛᴏᴍ ᴀᴍᴏᴜɴᴛ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ᴛʏᴘᴇ <white>/lunacy buy [ᴀᴍᴏᴜɴᴛ]"
+      - "<#8a7a66>ʀᴀᴛᴇ <dark_gray>» <#e2d2ff>{per} <dark_gray>= <#F4B554>{rate}"
+      - "<#8a7a66>ғʀᴏᴍ <white>{min} <#8a7a66>ᴛᴏ <white>{max}"
+  back:
+    slot: 40
+    material: DARK_OAK_DOOR
+    name: "<#F4B554>◀ ɢᴏ ʙᴀᴄᴋ"
+    lore: []
+
+# Xac nhan mua goi.  Bien: {total} {price}
+shop-confirm:
+  title: "<gradient:#e2d2ff:#9b7bff><bold>ʟᴜɴᴀᴄʏ</bold></gradient> <dark_gray>— ᴄᴏɴғɪʀᴍ"
+  rows: 3
+  package-slot: 13
+  layout:
+    - "~~~~~~~~~"
+    - "~##o#o##~"
+    - "~~~~~~~~~"
+  decor:
+    "~":
+      material: BLACK_STAINED_GLASS_PANE
+      mode: chase
+      speed: 2
+      frames: [WHITE_STAINED_GLASS_PANE, MAGENTA_STAINED_GLASS_PANE, PURPLE_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE]
+    "o":
+      material: PURPLE_STAINED_GLASS_PANE
+  confirm:
+    slot: 11
+    material: LIME_CONCRETE
+    name: "<green><bold>ᴄᴏɴғɪʀᴍ"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<gray>ʀᴇᴄᴇɪᴠᴇ <#e2d2ff>{total}"
+      - "<gray>ᴘᴀʏ <#F4B554>{price}"
+  cancel:
+    slot: 15
+    material: RED_CONCRETE
+    name: "<red><bold>ᴄᴀɴᴄᴇʟ"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Nut chuyen trang (man hinh ty le va lich su)
+#  Bien cua nav.back: {page} {pages}   Dieu kien: paged (man hinh co nhieu trang)
+# ---------------------------------------------------------------------
+nav:
+  prev:
+    slot: 48
+    material: SPECTRAL_ARROW
+    name: "<#F4B554>◀ ᴘʀᴇᴠɪᴏᴜs ᴘᴀɢᴇ"
+    lore: []
+  back:
+    slot: 49
+    material: DARK_OAK_DOOR
+    name: "<#F4B554>ɢᴏ ʙᴀᴄᴋ"
+    lore:
+      - "[if:paged]<#8a7a66>ᴘᴀɢᴇ <white>{page}<dark_gray>/<white>{pages}"
+  next:
+    slot: 50
+    material: SPECTRAL_ARROW
+    name: "<#F4B554>ɴᴇxᴛ ᴘᴀɢᴇ ▶"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Man hinh ty le (6 hang).  Bien tieu de: {banner} {page} {pages}
+#  item-slots: cac o hien vat pham (so o = so vat pham moi trang).
+# ---------------------------------------------------------------------
+rates:
+  title: "<gradient:#F4B554:#F6955D><bold>ʀᴀᴛᴇs</bold></gradient> <dark_gray>— ᴘᴀɢᴇ {page}/{pages}"
+  item-slots: ["10-16", "19-25", "28-34", "37-43"]
+  layout:
+    - "~~~~~~~~~"
+    - "~=======~"
+    - "~=======~"
+    - "~=======~"
+    - "~=======~"
+    - "~~~~~~~~~"
+  rules-button:                # khoi lore {spark-rules} lay tu muc spark-rules o tren
+    slot: 4
+    material: PAPER
+    glow: true
+    name: "<#F4B554><bold>sᴘᴀʀᴋ ʀᴜʟᴇs"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "{spark-rules}"
+
+# ---------------------------------------------------------------------
+#  Lich su quay (6 hang).  Bien tieu de: {page}
+#  Hinh dang cua the lay tu vat pham da quay.
+#  Bien the: {name} {rarity} {rarity-color} {banner} {cycle} {pity} {time}
+#  Dieu kien: spark (lan nhan nay la doi bang spark)
+# ---------------------------------------------------------------------
+history:
+  title: "<gradient:#F4B554:#F6955D><bold>ʜɪsᴛᴏʀʏ</bold></gradient> <dark_gray>— ᴘᴀɢᴇ {page}"
+  item-slots: ["10-16", "19-25", "28-34", "37-43"]
+  layout:
+    - "~~~~~~~~~"
+    - "~=======~"
+    - "~=======~"
+    - "~=======~"
+    - "~=======~"
+    - "~~~~~~~~~"
+  entry:
+    name: "{rarity-color}{name}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ʀᴀʀɪᴛʏ <dark_gray>» {rarity}"
+      - "<#8a7a66>ʙᴀɴɴᴇʀ <dark_gray>» {banner}"
+      - "<#8a7a66>ᴄʏᴄʟᴇ <dark_gray>» <white>#{cycle}"
+      - "[if:!spark]<#8a7a66>ᴏʙᴛᴀɪɴᴇᴅ ᴀғᴛᴇʀ <dark_gray>» <white>{pity} <#8a7a66>ᴘᴜʟʟs"
+      - "[if:spark]<#F4B554>✦ ᴇxᴄʜᴀɴɢᴇᴅ ᴜsɪɴɢ sᴘᴀʀᴋ"
+      - "<dark_gray>{time}"
+  empty:
+    slot: 22
+    material: BARRIER
+    name: "<gray>ɴᴏ ᴘᴜʟʟs ʏᴇᴛ"
+    lore: []
+
+# ---------------------------------------------------------------------
+#  Man hinh ket qua quay (5 hang).  Bien tieu de: {count} {banner}
+#
+#   ~ ~ ~ ~ S ~ ~ ~ ~      S = tom tat
+#   ~ . 1 2 3 4 5 . ~      10 the (quay x10)
+#   ~ o . . 1 . . o ~      1 the (quay x1) nam giua
+#   ~ . 6 7 8 9 10 . ~
+#   ~ ~ ~ < X > ~ ~ ~      < quay lai, X bo qua (khi dang chay hoat anh), > quay tiep
+# ---------------------------------------------------------------------
+result:
+  title: "<gradient:#F4B554:#F6955D><bold>ᴇxᴛʀᴀᴄᴛɪᴏɴ</bold></gradient> <dark_gray>— x{count}"
+  rows: 5
+  layout:
+    - "~~~~~~~~~"
+    - "~#######~"
+    - "~o#####o~"
+    - "~#######~"
+    - "~~~~~~~~~"
+  slots-single: [22]                              # vi tri the khi quay x1
+  slots-multi: ["11-15", "29-33"]                 # vi tri 10 the khi quay x10
+  # Sau khi lat het the: vien (ky tu trong "symbols") doi sang mau do hiem cao nhat vua ra,
+  # neu do hiem do >= min-rarity. Trong frames, RARITY = tam kinh cua do hiem do (muc rarity.*.pane).
+  tint:
+    symbols: "~"
+    min-rarity: RARE
+    mode: chase
+    speed: 1
+    frames: [WHITE_STAINED_GLASS_PANE, RARITY, RARITY, RARITY, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE, BLACK_STAINED_GLASS_PANE]
+  # Tom tat.  Bien: {count} {banner-plain}.  Khoi {rarity-lines}: moi do hiem co mat 1 dong theo rarity-line
+  summary:
+    slot: 4
+    material: NETHER_STAR
+    name: "<gradient:#F4B554:#F6955D><bold>ᴘᴜʟʟ ʀᴇsᴜʟᴛ x{count}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ʙᴀɴɴᴇʀ <dark_gray>» <white>{banner-plain}"
+      - ""
+      - "{rarity-lines}"
+  rarity-line: "<dark_gray>▪ {rarity}<dark_gray> » <white>{count}"    # Bien: {rarity} {count}
+  skip:                        # nut Bo qua trong luc chay hoat anh
+    slot: 40
+    material: BARRIER
+    name: "<red><bold>sᴋɪᴘ"
+    lore:
+      - "<gray>ʀᴇᴠᴇᴀʟ ᴀʟʟ ʀᴇsᴜʟᴛs ɪᴍᴍᴇᴅɪᴀᴛᴇʟʏ."
+  back:
+    slot: 39
+    material: DARK_OAK_DOOR
+    name: "<#F4B554>◀ ɢᴏ ʙᴀᴄᴋ"
+    lore: []
+  # Nut quay tiep.  Bien: {count} {cost} {balance}
+  again-single:
+    slot: 41
+    material: GOLD_NUGGET
+    name: "<gradient:#F4B554:#F6955D><bold>ᴘᴜʟʟ ᴀɢᴀɪɴ x{count}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ᴄᴏsᴛ <dark_gray>» <#F4B554>{cost}"
+      - "<#8a7a66>ʏᴏᴜ ʜᴀᴠᴇ <dark_gray>» <white>{balance}"
+  again-ten:
+    slot: 41
+    material: GOLD_INGOT
+    amount: 10
+    glow: true
+    name: "<gradient:#F6955D:#ff5f6d><bold>ᴘᴜʟʟ ᴀɢᴀɪɴ x{count}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ᴄᴏsᴛ <dark_gray>» <#F4B554>{cost}"
+      - "<#8a7a66>ʏᴏᴜ ʜᴀᴠᴇ <dark_gray>» <white>{balance}"
+
+# ---------------------------------------------------------------------
+#  Hoat anh lat the (thoi gian chinh o config.yml, muc animation)
+# ---------------------------------------------------------------------
+animation:
+  card-back:                   # the up luc dang xao tron
+    material: BROWN_STAINED_GLASS_PANE
+    name: "<#F4B554>?"
+  glow-pane-name: "{rarity-color}✦"   # ten tam kinh sang theo do hiem truoc khi lat. Bien: {rarity-color}
+  spin-palette:                # cac mau the nhap nhay luc xao tron
+    - BROWN_STAINED_GLASS_PANE
+    - ORANGE_STAINED_GLASS_PANE
+    - YELLOW_STAINED_GLASS_PANE
+    - RED_STAINED_GLASS_PANE
+    - GRAY_STAINED_GLASS_PANE
+    - LIGHT_GRAY_STAINED_GLASS_PANE
+  flash:                       # vien nhap nhay khi lat the hiem
+    materials: [ORANGE_STAINED_GLASS_PANE, YELLOW_STAINED_GLASS_PANE, WHITE_STAINED_GLASS_PANE]
+    # symbols: cac ky tu trong result.layout se nhap nhay (uu tien hon "slots" kieu cu)
+    symbols: "~o"
+    count:                     # so lan nhap nhay theo do hiem (0 = khong nhap nhay)
+      COMMON: 0
+      UNCOMMON: 0
+      RARE: 0
+      EPIC: 3
+      LEGENDARY: 6
+
+# ---------------------------------------------------------------------
+#  Am thanh.  Moi phan tu: "khoa-am-thanh am-luong cao-do"  (am luong, cao do co the bo).
+#  Khoa am thanh la ten tren wiki Minecraft, vd block.note_block.pling. Ghi "none" de tat.
+# ---------------------------------------------------------------------
+sounds:
+  spin:                        # tieng "tach" luc xao tron, cao do tang dan
+    sound: "block.note_block.hat"
+    volume: 0.6
+    pitch-start: 0.7
+    pitch-step: 0.05
+    pitch-max: 2.0
+  tint:                        # khi the sang theo do hiem (truoc khi lat)
+    COMMON: ["block.note_block.pling 0.8 0.9"]
+    UNCOMMON: ["block.note_block.pling 0.8 1.1"]
+    RARE: ["block.note_block.pling 0.9 1.4"]
+    EPIC: ["block.note_block.pling 1.0 1.8"]
+    LEGENDARY: ["block.beacon.activate 1.0 1.2"]
+  reveal:                      # khi lat the
+    COMMON: ["entity.experience_orb.pickup 0.8 1.0"]
+    UNCOMMON: ["entity.experience_orb.pickup 0.8 1.0"]
+    RARE: ["block.amethyst_block.chime 1.0 1.2"]
+    EPIC: ["entity.player.levelup 1.0 1.0"]
+    LEGENDARY:
+      - "ui.toast.challenge_complete 1.0 1.0"
+      - "entity.firework_rocket.blast 1.0 1.0"
+  result-high-rarity: EPIC     # tu do hiem nay tro len thi dung am thanh result-high khi hien ket qua
+  result-high: ["ui.toast.challenge_complete 1.0 1.0"]
+  result-normal: ["entity.player.levelup 1.0 1.0"]
+  spark-exchanged: ["ui.toast.challenge_complete 1.0 1.0"]
+  lunacy-bought: ["block.amethyst_block.resonate 1.0 1.2", "entity.player.levelup 0.6 1.6"]
