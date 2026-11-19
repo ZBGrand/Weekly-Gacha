@@ -272,3 +272,153 @@ banners:
         amount: 2
         rarity: LEGENDARY
         chance: 10
+
+  # ===================================================================
+  #  4) Identity Extraction - quay Identity (vu khi MMOItems type LIMBUS)
+  #     Tier theo wiki Limbus: 3* = Ohr Ein Sof (LEGENDARY), 2* = Ein Sof (VERY_RARE), 1* = Ayin (RARE).
+  #     Khop voi "tier" cua tung mon trong MMOItems limbus.yml. Ty le theo do hiem (muc rates),
+  #     cac mon cung do hiem chia deu. Spark 200 luot = tu chon 1 Identity 3*.
+  #     Mon trung se duoc xu ly o buoc Uptie (xem LimbusCore).
+  # ===================================================================
+  identity_extraction:
+    type: NORMAL
+    display-name: "<gradient:#ff3b3b:#f3c35a><bold>Identity Extraction"
+    icon: NETHER_STAR
+    description:
+      - "<gray>Quay Identity của các Sinner."
+      - "<gold>★★★ <gray>Ohr Ein Sof  <yellow>★★ <gray>Ein Sof  <white>★ <gray>Ayin"
+      - "<gray>Quay x10 chắc chắn có <yellow>★★<gray> trở lên."
+    cost:
+      type: LUNACY
+      single: 130
+      ten: 1300
+    spark:
+      enabled: true
+      threshold: 200
+      rarity: LEGENDARY
+      ten-guarantee: VERY_RARE
+    rates:
+      LEGENDARY: 2.9
+      VERY_RARE: 12.8
+      RARE: 84.3
+    rewards:
+      meursault_tiger_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: MEURSAULT_TIGER_BLADE
+        rarity: LEGENDARY
+      yisang_oracle_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: YISANG_ORACLE_BLADE
+        rarity: LEGENDARY
+      sinclair_pinky_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: SINCLAIR_PINKY_BLADE
+        rarity: LEGENDARY
+      wcorp_meursault_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: WCORP_MEURSAULT_BLADE
+        rarity: VERY_RARE
+      blade_lineage_sword:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: BLADE_LINEAGE_SWORD
+        rarity: VERY_RARE
+      wcorp_don_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: WCORP_DON_BLADE
+        rarity: VERY_RARE
+      kurokumo_ryoshu_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: KUROKUMO_RYOSHU_BLADE
+        rarity: VERY_RARE
+      rcorp_rabbit_carbine:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: RCORP_RABBIT_CARBINE
+        rarity: VERY_RARE
+      rcorp_reindeer_antler:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: RCORP_REINDEER_ANTLER
+        rarity: VERY_RARE
+      kurokumo_rodion_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: KUROKUMO_RODION_BLADE
+        rarity: VERY_RARE
+      bl_sinclair_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: BL_SINCLAIR_BLADE
+        rarity: VERY_RARE
+      seven_outis_cane:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: SEVEN_OUTIS_CANE
+        rarity: VERY_RARE
+      seven_assoc_rapier:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: SEVEN_ASSOC_RAPIER
+        rarity: RARE
+      wcorp_faust_mace:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: WCORP_FAUST_MACE
+        rarity: RARE
+      kurokumo_honglu_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: KUROKUMO_HONGLU_BLADE
+        rarity: RARE
+      liu_meursault_breaker:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: LIU_MEURSAULT_BREAKER
+        rarity: RARE
+      liu_gregor_staff:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: LIU_GREGOR_STAFF
+        rarity: RARE
+      liu_honglu_saber:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: LIU_HONGLU_SABER
+        rarity: RARE
+      shi_don_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: SHI_DON_BLADE
+        rarity: RARE
+      shi_heathcliff_edge:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: SHI_HEATHCLIFF_EDGE
+        rarity: RARE
+      shi_ishmael_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: SHI_ISHMAEL_BLADE
+        rarity: RARE
+      seven_ryoshu_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: SEVEN_RYOSHU_BLADE
+        rarity: RARE
+      zwei_sinclair_baton:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: ZWEI_SINCLAIR_BATON
+        rarity: RARE
+      bl_outis_blade:
+        provider: MMOITEMS
+        type: LIMBUS
+        item: BL_OUTIS_BLADE
+        rarity: RARE
