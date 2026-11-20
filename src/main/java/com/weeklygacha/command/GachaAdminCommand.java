@@ -294,6 +294,10 @@ public final class GachaAdminCommand implements CommandExecutor, TabCompleter {
             return;
         }
         String action = args[1].toLowerCase(Locale.ROOT);
+        if (action.equals("giveall") || action.equals("addall")) {
+            lunacyGiveAll(sender, args);
+            return;
+        }
         OfflinePlayer target = findPlayer(args[2]);
         if (target == null) {
             plugin.messages().send(sender, "admin-player-unknown", ph("player", args[2]));
@@ -343,6 +347,49 @@ public final class GachaAdminCommand implements CommandExecutor, TabCompleter {
         }
     }
 
+    /**
+     * /gachaadmin lunacy giveall <số lượng> [online|all] [-s]
+     * online (mặc định): mọi người đang online; all: tất cả người đã từng vào server (kể cả offline).
+     */
+    private void lunacyGiveAll(CommandSender sender, String[] args) {
+        long amount;
+        try {
+            amount = Long.parseLong(args[2]);
+        } catch (NumberFormatException e) {
+            amount = -1;
+        }
+        if (amount <= 0) {
+            plugin.messages().send(sender, "admin-lunacy-invalid", ph("amount", args[2]));
+            return;
+        }
+        boolean silent = false;
+        boolean everyone = false;
+        for (int i = 3; i < args.length; i++) {
+            if (args[i].equalsIgnoreCase("-s")) silent = true;
+            else if (args[i].equalsIgnoreCase("all")) everyone = true;
+            else if (!args[i].equalsIgnoreCase("online")) {
+                plugin.messages().sendList(sender, "admin-lunacy-usage");
+                return;
+            }
+        }
+        var lu = plugin.lunacy();
+        String reason = "ADMIN:" + sender.getName() + ":giveall";
+        java.util.Map<UUID, String> targets = new java.util.LinkedHashMap<>();
+        if (everyone) {
+            for (OfflinePlayer op : Bukkit.getOfflinePlayers()) {
+                targets.put(op.getUniqueId(), op.getName() != null ? op.getName() : op.getUniqueId().toString());
+            }
+        }
+        for (Player p : Bukkit.getOnlinePlayers()) targets.put(p.getUniqueId(), p.getName());
+
+        for (var e : targets.entrySet()) {
+            lu.give(e.getKey(), e.getValue(), amount, reason);
+            if (!silent && Bukkit.getPlayer(e.getKey()) != null) lu.notifyReceived(e.getKey(), amount, null);
+        }
+        plugin.messages().send(sender, "admin-lunacy-giveall", ph("count", String.valueOf(targets.size())),
+                ph("amount", lu.plain(amount)));
+    }
+
     /** Tìm người chơi online, hoặc người đã từng vào server; null nếu không biết. */
     private static OfflinePlayer findPlayer(String name) {
         OfflinePlayer online = Bukkit.getPlayerExact(name);
@@ -375,7 +422,7 @@ public final class GachaAdminCommand implements CommandExecutor, TabCompleter {
                     if ("config".startsWith(prefix)) out.add("config");
                 }
                 case "lunacy", "luna" -> {
-                    for (String s : List.of("give", "take", "set", "check")) if (s.startsWith(prefix)) out.add(s);
+                    for (String s : List.of("give", "giveall", "take", "set", "check")) if (s.startsWith(prefix)) out.add(s);
                 }
                 default -> {
                 }
