@@ -50,8 +50,8 @@ banners:
       - "<gray>Phần thưởng cơ bản và vài vật phẩm quý."
     cost:
       type: LUNACY
-      single: 100
-      ten: 900
+      single: 130
+      ten: 1170
     spark:
       enabled: true
       threshold: 300
