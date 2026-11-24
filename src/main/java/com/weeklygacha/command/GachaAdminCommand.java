@@ -29,7 +29,7 @@ import static com.weeklygacha.service.MessageService.ph;
 public final class GachaAdminCommand implements CommandExecutor, TabCompleter {
 
     private static final List<String> SUB = List.of(
-            "info", "list", "setbanner", "auto", "next", "restartcycle", "reload", "resetspark", "resetlimit", "history", "check", "givekey", "lunacy");
+            "info", "list", "setbanner", "auto", "next", "restartcycle", "reload", "resetspark", "resetlimit", "history", "log", "check", "givekey", "lunacy");
 
     private final WeeklyGachaPlugin plugin;
 
@@ -207,6 +207,10 @@ public final class GachaAdminCommand implements CommandExecutor, TabCompleter {
                                 plugin.messages().send(sender, "history-error");
                                 return;
                             }
+                            if (list.isEmpty()) {
+                                plugin.messages().send(sender, "admin-history-empty", ph("player", args[1]));
+                                return;
+                            }
                             for (var e : list) {
                                 Banner b = bm.get(e.bannerId());
                                 sender.sendMessage(Text.mm(plugin.messages().raw("admin-history-line"),
@@ -216,6 +220,24 @@ public final class GachaAdminCommand implements CommandExecutor, TabCompleter {
                                         ph("pity", e.pityAtPull() > 0 ? String.valueOf(e.pityAtPull()) : "spark")));
                             }
                         }));
+            }
+            case "log" -> {
+                if (!(sender instanceof Player admin)) {
+                    plugin.messages().send(sender, "players-only");
+                    return true;
+                }
+                if (args.length < 2) {
+                    plugin.messages().sendList(sender, "admin-usage");
+                    return true;
+                }
+                OfflinePlayer target = findPlayer(args[1]);
+                if (target == null) {
+                    plugin.messages().send(sender, "admin-player-unknown", ph("player", args[1]));
+                    return true;
+                }
+                String name = target.getName() != null ? target.getName() : args[1];
+                plugin.menu().openLog(admin, target.getUniqueId(), name,
+                        args.length > 2 && args[2].equalsIgnoreCase("lunacy"), 0);
             }
             case "givekey" -> {
                 if (args.length < 3) {
@@ -413,7 +435,7 @@ public final class GachaAdminCommand implements CommandExecutor, TabCompleter {
                         if (b.type() == BannerType.LIMITED && b.id().startsWith(prefix)) out.add(b.id());
                     }
                 }
-                case "resetspark", "resetpity", "resetlimit", "history", "givekey" -> {
+                case "resetspark", "resetpity", "resetlimit", "history", "log", "givekey" -> {
                     for (var p : Bukkit.getOnlinePlayers()) {
                         if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix)) out.add(p.getName());
                     }

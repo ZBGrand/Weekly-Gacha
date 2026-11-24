@@ -83,6 +83,7 @@ admin-usage:
   - "<gold>/gachaadmin resetspark <người chơi> [banner] <gray>- xoá điểm spark"
   - "<gold>/gachaadmin resetlimit <người chơi> [banner] <gray>- xoá số lượt đã dùng (banner giới hạn lượt)"
   - "<gold>/gachaadmin history <người chơi> [số dòng] <gray>- xem lịch sử"
+  - "<gold>/gachaadmin log <người chơi> [lunacy] <gray>- menu log: lịch sử quay + Lunacy đã tiêu"
   - "<gold>/gachaadmin check <gray>- kiểm tra vật phẩm và chi phí cấu hình"
   - "<gold>/gachaadmin givekey <người chơi> <banner> [số lượng] <gray>- phát key quay"
   - "<gold>/gachaadmin lunacy <give|take|set|check> <người chơi> [số] <gray>- quản lý Lunacy"
@@ -110,4 +111,5 @@ admin-check-cost-fail: "<red>Chi phí lỗi: <white><banner></white> — <reason
 admin-check-ok: "<green>Tất cả <white><count></white> vật phẩm đều hợp lệ."
 admin-check-banner-fail: "<red>Banner bị chặn: <white><reason></white>"
 admin-check-fail: "<red>Vật phẩm lỗi: <white><banner>/<reward></white> (<provider>)"
+admin-history-empty: "<yellow><player> <gray>chưa có lượt quay nào."
 admin-history-line: "<gray><time> <dark_gray>| <banner> <dark_gray>| <item> <dark_gray>| lượt <white><pity>"
