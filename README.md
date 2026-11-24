@@ -173,6 +173,7 @@ rates:
 | `/gachaadmin resetspark <người chơi> [banner]` | Xoá điểm spark |
 | `/gachaadmin resetlimit <người chơi> [banner]` | Xoá số lượt đã dùng (banner có `limit.max-pulls`) |
 | `/gachaadmin history <người chơi> [số dòng]` | Xem lịch sử của người chơi |
+| `/gachaadmin log <người chơi> [lunacy]` | Menu log: lịch sử quay, Lunacy đã tiêu (tổng + theo banner), nhật ký Lunacy |
 | `/gachaadmin check` | Kiểm tra vật phẩm và chi phí cấu hình |
 | `/gachaadmin givekey <người chơi> <banner> [số lượng]` | Phát key quay (banner dùng `cost.type: ITEM`) |
 | `/gachaadmin lunacy give <người chơi> <số> [-s]` | Cộng Lunacy (cả người chơi offline; `-s` không báo) |

@@ -20,7 +20,7 @@ commands:
     permission: weeklygacha.use
   gachaadmin:
     description: Lenh quan tri WeeklyGacha
-    usage: /<command> <info|list|setbanner|auto|next|restartcycle|reload|resetspark|resetlimit|history|check|givekey|lunacy>
+    usage: /<command> <info|list|setbanner|auto|next|restartcycle|reload|resetspark|resetlimit|history|log|check|givekey|lunacy>
     aliases: [gadmin]
     permission: weeklygacha.admin
 

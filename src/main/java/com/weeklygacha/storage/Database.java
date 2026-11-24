@@ -253,6 +253,93 @@ public final class Database {
         }, executor);
     }
 
+    // ------------------------------------------------------------------ log (admin)
+
+    /** Một dòng nhật ký Lunacy. delta âm = tiêu. */
+    public record LunacyLogEntry(long delta, String reason, long timestamp) {
+    }
+
+    /**
+     * Tổng hợp cho menu log.
+     *
+     * @param spent          tổng Lunacy đã tiêu vào quay (reason PULL:*)
+     * @param spentByBanner  Lunacy tiêu theo banner
+     * @param bought         tổng Lunacy đã mua (reason BUY:*)
+     * @param pullsByRarity  số lượt ra theo độ hiếm (không tính đổi spark)
+     * @param sparkExchanges số lần đổi bằng spark
+     * @param balance        số dư hiện tại
+     */
+    public record LogSummary(long spent, java.util.Map<String, Long> spentByBanner, long bought,
+                             java.util.Map<Rarity, Integer> pullsByRarity, int sparkExchanges, long balance) {
+        public int totalPulls() {
+            return pullsByRarity.values().stream().mapToInt(Integer::intValue).sum();
+        }
+    }
+
+    public CompletableFuture<LogSummary> logSummary(UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                long spent = 0;
+                long bought = 0;
+                java.util.Map<String, Long> byBanner = new java.util.LinkedHashMap<>();
+                try (PreparedStatement ps = connection.prepareStatement(
+                        "SELECT reason, SUM(delta) FROM lunacy_log WHERE uuid = ? AND "
+                                + "(reason LIKE 'PULL:%' OR reason LIKE 'BUY:%') GROUP BY reason ORDER BY SUM(delta)")) {
+                    ps.setString(1, uuid.toString());
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            String reason = rs.getString(1);
+                            long sum = rs.getLong(2);
+                            if (reason.startsWith("PULL:")) {
+                                spent += -sum;
+                                byBanner.put(reason.substring(5), -sum);
+                            } else {
+                                bought += sum;
+                            }
+                        }
+                    }
+                }
+                java.util.Map<Rarity, Integer> rarity = new java.util.EnumMap<>(Rarity.class);
+                int spark = 0;
+                try (PreparedStatement ps = connection.prepareStatement(
+                        "SELECT rarity, pity_at_pull > 0, COUNT(*) FROM pull_history WHERE uuid = ? "
+                                + "GROUP BY rarity, pity_at_pull > 0")) {
+                    ps.setString(1, uuid.toString());
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            if (rs.getInt(2) == 0) {
+                                spark += rs.getInt(3);
+                            } else {
+                                rarity.merge(Rarity.parse(rs.getString(1), Rarity.COMMON), rs.getInt(3), Integer::sum);
+                            }
+                        }
+                    }
+                }
+                return new LogSummary(spent, byBanner, bought, rarity, spark, readLunacy(uuid));
+            } catch (SQLException ex) {
+                throw new CompletionException(ex);
+            }
+        }, executor);
+    }
+
+    public CompletableFuture<List<LunacyLogEntry>> lunacyLog(UUID uuid, int limit, int offset) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<LunacyLogEntry> out = new ArrayList<>();
+            try (PreparedStatement ps = connection.prepareStatement(
+                    "SELECT delta, reason, ts FROM lunacy_log WHERE uuid = ? ORDER BY id DESC LIMIT ? OFFSET ?")) {
+                ps.setString(1, uuid.toString());
+                ps.setInt(2, limit);
+                ps.setInt(3, offset);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) out.add(new LunacyLogEntry(rs.getLong(1), rs.getString(2), rs.getLong(3)));
+                }
+            } catch (SQLException ex) {
+                throw new CompletionException(ex);
+            }
+            return out;
+        }, executor);
+    }
+
     // ------------------------------------------------------------------ quà chờ trao
 
     public void deletePendingBatch(String batch) {

@@ -563,6 +563,122 @@ public final class GachaMenu {
         player.openInventory(inv);
     }
 
+    // ------------------------------------------------------------------ log của người chơi (admin)
+
+    /** Menu log: tab PULLS = lịch sử quay, tab LUNACY = nhật ký Lunacy; nút tổng hợp hiện tổng Lunacy đã tiêu. */
+    public void openLog(Player admin, UUID target, String targetName, boolean lunacyTab, int page) {
+        int pg = Math.max(0, page);
+        int size = gui().slotList("log.item-slots", DEFAULT_PAGE).size();
+        var db = plugin.database();
+        java.util.concurrent.CompletableFuture<List<Object>> rows = lunacyTab
+                ? db.lunacyLog(target, size + 1, pg * size).thenApply(l -> new ArrayList<Object>(l))
+                : db.history(target, size + 1, pg * size).thenApply(l -> new ArrayList<Object>(l));
+        db.logSummary(target).thenCombine(rows, (s, r) -> new Object[]{s, r}).whenComplete((res, error) ->
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    if (!admin.isOnline()) return;
+                    if (error != null || res == null) {
+                        plugin.messages().send(admin, "history-error");
+                        return;
+                    }
+                    @SuppressWarnings("unchecked")
+                    List<Object> list = (List<Object>) res[1];
+                    buildLog(admin, target, targetName, lunacyTab, pg,
+                            (com.weeklygacha.storage.Database.LogSummary) res[0], list);
+                }));
+    }
+
+    private void buildLog(Player admin, UUID target, String targetName, boolean lunacyTab, int page,
+                          com.weeklygacha.storage.Database.LogSummary sum, List<Object> rows) {
+        GuiConfig g = gui();
+        List<Integer> area = g.slotList("log.item-slots", DEFAULT_PAGE);
+        int size = area.size();
+        boolean hasNext = rows.size() > size;
+        BannerManager bm = plugin.banners();
+        var lu = plugin.lunacy();
+
+        MenuHolder holder = new MenuHolder();
+        Inventory inv = Bukkit.createInventory(holder, 54, Text.mm(g.text("log.title", vars(
+                "player", Text.escape(targetName), "page", String.valueOf(page + 1),
+                "tab", lunacyTab ? "ʟᴜɴᴀᴄʏ" : "ᴘᴜʟʟs"))));
+        holder.bind(inv);
+        g.applyLayout(holder, "log", null, g.filler());
+
+        for (int i = 0; i < Math.min(size, rows.size()); i++) {
+            ItemStack entry;
+            if (!lunacyTab) {
+                HistoryEntry e = (HistoryEntry) rows.get(i);
+                Banner b = bm.get(e.bannerId());
+                Reward r = b != null ? b.find(e.rewardId()) : null;
+                ItemStack base = r != null ? plugin.rewards().icon(r) : new ItemStack(Material.PAPER);
+                Set<String> c = new HashSet<>();
+                flag(c, "spark", e.pityAtPull() <= 0);
+                entry = g.decorate("log.pull-entry", base, c, vars(
+                        "name", Text.escape(e.rewardName()),
+                        "rarity", e.rarity().tagged(),
+                        "rarity-color", e.rarity().color(),
+                        "banner", b != null ? b.displayName() : "<gray>" + Text.escape(e.bannerId()),
+                        "cycle", String.valueOf(e.cycle()),
+                        "pity", String.valueOf(e.pityAtPull()),
+                        "time", Text.escape(TimeUtil.date(e.timestamp(), bm.zone()))), Map.of());
+            } else {
+                var e = (com.weeklygacha.storage.Database.LunacyLogEntry) rows.get(i);
+                Set<String> c = new HashSet<>();
+                flag(c, "spend", e.delta() < 0);
+                entry = g.item("log.lunacy-entry", c, vars(
+                        "amount", (e.delta() > 0 ? "<green>+" : "<red>-") + lu.plain(Math.abs(e.delta())),
+                        "reason", Text.escape(describeReason(e.reason())),
+                        "time", Text.escape(TimeUtil.date(e.timestamp(), bm.zone()))), Map.of());
+            }
+            if (entry != null) holder.set(area.get(i), entry, null);
+        }
+
+        List<String> bannerLines = new ArrayList<>();
+        sum.spentByBanner().forEach((id, v) -> {
+            Banner b = bm.get(id);
+            bannerLines.add(g.text("log.summary-banner-line", vars("banner",
+                    b != null ? b.displayName() : "<gray>" + Text.escape(id), "amount", lu.plain(v))));
+        });
+        List<String> rarityLines = new ArrayList<>();
+        for (Rarity r : Rarity.values()) {
+            int n = sum.pullsByRarity().getOrDefault(r, 0);
+            if (n > 0) rarityLines.add(g.text("log.summary-rarity-line",
+                    vars("rarity", r.tagged(), "count", String.valueOf(n))));
+        }
+        put(holder, "log.summary", g.item("log.summary", Set.of(), vars(
+                "player", Text.escape(targetName),
+                "spent", lu.plain(sum.spent()),
+                "bought", lu.plain(sum.bought()),
+                "balance", lu.plain(sum.balance()),
+                "pulls", String.valueOf(sum.totalPulls()),
+                "spark", String.valueOf(sum.sparkExchanges())),
+                Map.of("banner-lines", bannerLines, "rarity-lines", rarityLines)), null);
+
+        put(holder, "log.tab-pulls", g.item("log.tab-pulls", lunacyTab ? Set.of() : Set.of("active"), Map.of(), Map.of()),
+                (p, click) -> openLog(p, target, targetName, false, 0));
+        put(holder, "log.tab-lunacy", g.item("log.tab-lunacy", lunacyTab ? Set.of("active") : Set.of(), Map.of(), Map.of()),
+                (p, click) -> openLog(p, target, targetName, true, 0));
+
+        navigation(holder, page > 0, hasNext, Set.of(), Map.of(),
+                Player::closeInventory,
+                p -> openLog(p, target, targetName, lunacyTab, page - 1),
+                p -> openLog(p, target, targetName, lunacyTab, page + 1));
+        if (rows.isEmpty()) put(holder, "log.empty", g.item("log.empty"), null);
+        admin.openInventory(inv);
+    }
+
+    /** PULL:banner -> "Quay banner", BUY:gói -> "Mua gói", ADMIN:x -> "Admin x"... */
+    private String describeReason(String reason) {
+        int i = reason.indexOf(':');
+        String kind = i < 0 ? reason : reason.substring(0, i);
+        String rest = i < 0 ? "" : reason.substring(i + 1);
+        String label = gui().string("log.reasons." + kind.toUpperCase(Locale.ROOT), kind);
+        if (kind.equals("PULL")) {
+            Banner b = plugin.banners().get(rest);
+            if (b != null) rest = Text.plain(Text.mm(b.displayName()));
+        }
+        return rest.isEmpty() ? label : label + ": " + rest;
+    }
+
     // ------------------------------------------------------------------ kết quả quay (+ hoạt ảnh)
 
     /**

@@ -654,6 +654,86 @@ history:
     lore: []
 
 # ---------------------------------------------------------------------
+#  Menu LOG cua admin: /gachaadmin log <nguoi choi> [lunacy]   (6 hang)
+#  Tieu de: {player} {tab} {page}
+#  summary: tong hop.  Bien: {player} {spent} (tong Lunacy da tieu de quay) {bought} (da mua) {balance}
+#           {pulls} (so luot quay) {spark} (so lan doi spark).  Khoi: {banner-lines} {rarity-lines}
+#  pull-entry: the 1 luot quay.  Bien: {name} {rarity} {rarity-color} {banner} {cycle} {pity} {time}  Dieu kien: spark
+#  lunacy-entry: 1 dong nhat ky Lunacy.  Bien: {amount} {reason} {time}  Dieu kien: spend
+#  tab-*: dieu kien "active" = tab dang xem.   reasons: ten hien thi cua tien to ly do.
+# ---------------------------------------------------------------------
+log:
+  title: "<gradient:#F4B554:#F6955D><bold>ʟᴏɢ</bold></gradient> <dark_gray>— <white>{player} <dark_gray>({tab}) ᴘ{page}"
+  item-slots: ["10-16", "19-25", "28-34", "37-43"]
+  layout:
+    - "~~~~~~~~~"
+    - "~=======~"
+    - "~=======~"
+    - "~=======~"
+    - "~=======~"
+    - "~~~~~~~~~"
+  summary:
+    slot: 4
+    material: BOOK
+    name: "<#F4B554><bold>{player}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ʟᴜɴᴀᴄʏ ᴅᴀ ᴛɪᴇᴜ <dark_gray>» <red>{spent}"
+      - "<#8a7a66>ʟᴜɴᴀᴄʏ ᴅᴀ ᴍᴜᴀ <dark_gray>» <green>{bought}"
+      - "<#8a7a66>sᴏ ᴅᴜ <dark_gray>» <white>{balance}"
+      - "<#8a7a66>ᴛᴏɴɢ ʟᴜᴏᴛ ǫᴜᴀʏ <dark_gray>» <white>{pulls} <dark_gray>(+{spark} ᴅᴏɪ sᴘᴀʀᴋ)"
+      - ""
+      - "<#8a7a66>ᴛɪᴇᴜ ᴛʜᴇᴏ ʙᴀɴɴᴇʀ"
+      - "{banner-lines}"
+      - ""
+      - "<#8a7a66>ᴅᴏ ʜɪᴇᴍ ᴅᴀ ǫᴜᴀʏ"
+      - "{rarity-lines}"
+  summary-banner-line: "<dark_gray>▪ {banner}<dark_gray> » <red>{amount}"   # Bien: {banner} {amount}
+  summary-rarity-line: "<dark_gray>▪ {rarity}<dark_gray> » <white>{count}"  # Bien: {rarity} {count}
+  tab-pulls:
+    slot: 46
+    material: PAPER
+    name: "<#F4B554>ʟɪᴄʜ sᴜ ǫᴜᴀʏ"
+    glow: active
+    lore:
+      - "[if:active]<green>ᴅᴀɴɢ xᴇᴍ"
+      - "[if:!active]<gray>ʙᴀᴍ ᴅᴇ xᴇᴍ"
+  tab-lunacy:
+    slot: 52
+    material: REDSTONE
+    name: "<#F4B554>ɴʜᴀᴛ ᴋʏ ʟᴜɴᴀᴄʏ"
+    glow: active
+    lore:
+      - "[if:active]<green>ᴅᴀɴɢ xᴇᴍ"
+      - "[if:!active]<gray>ʙᴀᴍ ᴅᴇ xᴇᴍ"
+  pull-entry:
+    name: "{rarity-color}{name}"
+    lore:
+      - "<#4a3d30>━━━━━━━━━━━━━━━━━━━━"
+      - "<#8a7a66>ʀᴀʀɪᴛʏ <dark_gray>» {rarity}"
+      - "<#8a7a66>ʙᴀɴɴᴇʀ <dark_gray>» {banner}"
+      - "<#8a7a66>ᴄʏᴄʟᴇ <dark_gray>» <white>#{cycle}"
+      - "[if:!spark]<#8a7a66>ᴏʙᴛᴀɪɴᴇᴅ ᴀғᴛᴇʀ <dark_gray>» <white>{pity} <#8a7a66>ᴘᴜʟʟs"
+      - "[if:spark]<#F4B554>✦ ᴇxᴄʜᴀɴɢᴇᴅ ᴜsɪɴɢ sᴘᴀʀᴋ"
+      - "<dark_gray>{time}"
+  lunacy-entry:
+    material: REDSTONE
+    name: "{amount}"
+    lore:
+      - "<#8a7a66>{reason}"
+      - "<dark_gray>{time}"
+  reasons:
+    PULL: "Quay"
+    BUY: "Mua goi"
+    ADMIN: "Admin"
+    REWARD: "Phan thuong"
+  empty:
+    slot: 22
+    material: BARRIER
+    name: "<gray>ɴᴏ ᴅᴀᴛᴀ"
+    lore: []
+
+# ---------------------------------------------------------------------
 #  Man hinh ket qua quay (5 hang).  Bien tieu de: {count} {banner}
 #
 #   ~ ~ ~ ~ S ~ ~ ~ ~      S = tom tat
